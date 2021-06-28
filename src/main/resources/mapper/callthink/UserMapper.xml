@@ -34,6 +34,13 @@
         <result column="is_del" property="isDel" jdbcType="INTEGER"/>
         <result column="group_id" property="groupId" jdbcType="INTEGER"/>
         <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+        <result column="province_code" property="provinceCode" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="county_code" property="countyCode" jdbcType="VARCHAR"/>
+        <result column="county" property="county" jdbcType="VARCHAR"/>
+
     </resultMap>
 
     <sql id="UserBaseColumn">
@@ -68,7 +75,8 @@
 
     <select id="findAllUser" resultMap="UserGroup" parameterType="com.cn.admin.api.gg.vo.user.UserQueryVO">
         select u.id,u.create_time,u.ghid,u.name,u.nick_name,u.mobile,u.sex,u.age,u.user_role,
-        u.user_type,u.address,u.head_url,u.is_del,gm.group_id,g.group_name
+        u.user_type,u.address,u.head_url,u.is_del,u.province_code,u.province,u.city_code,u.city,
+        u.county_code,u.county,gm.group_id,g.group_name
         from t_user u
         left join t_group_member gm on u.ghid = gm.ghid
         left join t_group g on gm.group_id = g.id
@@ -102,9 +110,15 @@
             user_type,
             address,
             head_url,
-            password
+            password,
+            province_code,
+            province,
+            city_code,
+            city,
+            county_code,
+            county
         )values (
-            #{id},#{ghid},#{name},#{nickName},#{mobile},#{sex},#{age},#{userRole},#{userType},#{address},#{headUrl},#{password}
+            #{id},#{ghid},#{name},#{nickName},#{mobile},#{sex},#{age},#{userRole},#{userType},#{address},#{headUrl},#{password},#{provinceCode},#{province},#{cityCode},#{city},#{countyCode},#{county}
         ) ON DUPLICATE KEY UPDATE
             id = values(id),
             ghid = values(ghid),
@@ -117,6 +131,12 @@
             user_type = values(user_type),
             address = values(address),
             head_url = values(head_url),
-            password = values(password)
+            password = values(password),
+            province_code = values(province_code),
+            province = values(province)
+            city_code = values(city_code),
+            city = values(city),
+            county_code = values(county_code),
+            county = values(county)
     </insert>
 </mapper>

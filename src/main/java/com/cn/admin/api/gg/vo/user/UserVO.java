@@ -38,4 +38,16 @@ public class UserVO {
 
     private String password;
 
+    private String provinceCode;
+
+    private String province;
+
+    private String cityCode;
+
+    private String city;
+
+    private String countyCode;
+
+    private String county;
+
 }

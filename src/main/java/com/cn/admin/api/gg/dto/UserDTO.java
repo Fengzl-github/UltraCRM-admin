@@ -39,4 +39,16 @@ public class UserDTO {
 
     private Integer isDel;
 
+    private String provinceCode;
+
+    private String province;
+
+    private String cityCode;
+
+    private String city;
+
+    private String countyCode;
+
+    private String county;
+
 }

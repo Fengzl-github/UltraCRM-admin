@@ -55,7 +55,7 @@ public class RequestBodyWrapper extends HttpServletRequestWrapper {
             log.info(" ## request uri -> {}", request.getRequestURI());
             log.info(" ## request ip -> {}", RemoteAddrUtils.getIpAddr(request));
             log.info("                                                           ");
-            log.info("请求参数 ## ->{}", jsonText);
+            log.info("[请求参数] ## ->{}", jsonText);
             log.info("-----------------------------------------------------------");
         } catch (IOException e) {
             e.printStackTrace();

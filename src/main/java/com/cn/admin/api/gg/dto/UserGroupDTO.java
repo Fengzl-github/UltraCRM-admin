@@ -40,4 +40,16 @@ public class UserGroupDTO {
     /**组名称**/
     private String groupName;
 
+    private String provinceCode;
+
+    private String province;
+
+    private String cityCode;
+
+    private String city;
+
+    private String countyCode;
+
+    private String county;
+
 }
