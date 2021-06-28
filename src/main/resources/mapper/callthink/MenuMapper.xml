@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.admin.api.mapper.callthink.MenuMapper">
+    <resultMap id="Menu" type="com.cn.admin.api.gg.dto.MenuDTO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="m_id" property="mId" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 获取一级菜单-->
+    <select id="getMenu1Data" resultMap="Menu" parameterType="integer">
+        select id,title,url,m_id, icon
+        from t_menu_bs
+        where visible = 1 and p_id = '0' and role >= #{role}
+        order by menu_sort asc
+    </select>
+
+    <!-- 获取下级菜单-->
+    <select id="getNextMenuData" resultMap="Menu">
+        select id,title,url,m_id, icon
+        from t_menu_bs
+        where visible = 1 and p_id = #{pId} and role >= #{role}
+        order by menu_sort asc
+    </select>
+</mapper>
