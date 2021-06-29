@@ -49,14 +49,7 @@ public class RequestBodyWrapper extends HttpServletRequestWrapper {
         try {
             requestBody = StreamUtils.copyToByteArray(request.getInputStream());
             jsonText = new String(requestBody, "UTF-8");
-            log.info("                                                           ");
-            log.info("-----------------------------------------------------------");
-            log.info(" ## request method -> {}", request.getMethod());
-            log.info(" ## request uri -> {}", request.getRequestURI());
-            log.info(" ## request ip -> {}", RemoteAddrUtils.getIpAddr(request));
-            log.info("                                                           ");
-            log.info("[请求参数] ## ->{}", jsonText);
-            log.info("-----------------------------------------------------------");
+            log.info(" ## request params ->{}", jsonText);
         } catch (IOException e) {
             e.printStackTrace();
         }

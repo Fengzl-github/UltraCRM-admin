@@ -3,6 +3,7 @@ package com.cn.admin.api.gg.service.impl;
 import com.cn.admin.api.gg.dto.GroupDTO;
 import com.cn.admin.api.gg.dto.GroupMemberDTO;
 import com.cn.admin.api.gg.dto.UserDTO;
+import com.cn.admin.api.gg.dto.option.IntOption;
 import com.cn.admin.api.gg.mapstruct.group.GroupConvertet;
 import com.cn.admin.api.gg.service.GroupService;
 import com.cn.admin.api.gg.vo.group.GroupVO;
@@ -145,10 +146,10 @@ public class GroupServiceImpl implements GroupService {
      * @Desc 下拉-信息
      * @Date 2021/6/15 16:00
      * @param
-     * @return java.util.List<com.cn.admin.api.gg.dto.GroupDTO>
+     * @return java.util.List
      **/
     @Override
-    public List<GroupDTO> listGroupInfo() {
+    public List<IntOption> listGroupInfo() {
 
         return groupMapper.findAllOptions();
     }

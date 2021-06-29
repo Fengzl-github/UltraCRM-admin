@@ -2,6 +2,7 @@ package com.cn.admin.api.mapper.callthink;
 
 import com.cn.admin.api.gg.dto.GroupDTO;
 import com.cn.admin.api.gg.dto.GroupMemberDTO;
+import com.cn.admin.api.gg.dto.option.IntOption;
 import com.cn.admin.api.gg.vo.group.UserGroupVO;
 import org.springframework.stereotype.Repository;
 
@@ -31,5 +32,5 @@ public interface GroupMapper {
 
     List<GroupMemberDTO> findMemberByGroupId(Integer groupId);
 
-    List<GroupDTO> findAllOptions();
+    List<IntOption> findAllOptions();
 }

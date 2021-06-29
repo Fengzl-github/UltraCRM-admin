@@ -1,6 +1,7 @@
 package com.cn.admin.api.gg.service;
 
 import com.cn.admin.api.gg.dto.GroupDTO;
+import com.cn.admin.api.gg.dto.option.IntOption;
 import com.cn.admin.api.gg.vo.group.GroupVO;
 import com.cn.admin.api.gg.vo.group.UserGroupVO;
 import com.cn.admin.api.util.JsonPage;
@@ -30,9 +31,9 @@ public interface GroupService {
      * @Desc  下拉-组信息
      * @Date 2021/6/15 16:06
      * @param  
-     * @return java.util.List<com.cn.admin.api.gg.dto.GroupDTO>
+     * @return java.util.List
      **/
-    List<GroupDTO> listGroupInfo();
+    List<IntOption> listGroupInfo();
 
     /**
      * @Author fengzhilong

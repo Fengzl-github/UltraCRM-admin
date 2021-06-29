@@ -13,6 +13,7 @@ import com.cn.common.exception.FzlException;
 import com.cn.common.vo.ResCode;
 import com.cn.common.vo.ResResult;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ import javax.validation.constraints.NotNull;
  *@Date 2021/5/7 15:55
  *@Desc
  **/
+@Slf4j
 @RestController
 @Validated
 public class UserController {
