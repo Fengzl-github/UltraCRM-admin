@@ -34,20 +34,23 @@ public class RequestWrapperFilter implements Filter {
                 String requestUuid = LogConstant.REQUEST_ID_PREFIX + System.currentTimeMillis();
                 MDC.put(LogConstant.REQUEST_ID, requestUuid);
                 request.setAttribute(LogConstant.REQUEST_ID, requestUuid);
-                log.info("                                                           ");
                 log.info("-----------------------------------------------------------");
+                log.info("                                                           ");
                 log.info(" ## request method -> {}", request.getMethod());
                 log.info(" ## request uri -> {}", request.getRequestURI());
                 log.info(" ## request ip -> {}", RemoteAddrUtils.getIpAddr(request));
-                log.info("                                                           ");
-                log.info("-----------------------------------------------------------");
                 if (servletRequest.getContentType() != null
                         && (servletRequest.getContentType().toLowerCase().contains("json")
                 )) {
                     RequestBodyWrapper myRequestWrapper = new RequestBodyWrapper((HttpServletRequest) servletRequest);
+                    log.info(" ## request params -> {}", myRequestWrapper.getJsonText());
+                    log.info("                                                           ");
+                    log.info("-----------------------------------------------------------");
                     filterChain.doFilter(myRequestWrapper, servletResponse);
                 } else {
                     log.info(" ## request params -> {}", JSONObject.toJSONString(request.getParameterMap()));
+                    log.info("                                                           ");
+                    log.info("-----------------------------------------------------------");
                     filterChain.doFilter(servletRequest, servletResponse);
                 }
             } else {

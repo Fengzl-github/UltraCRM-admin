@@ -49,7 +49,6 @@ public class RequestBodyWrapper extends HttpServletRequestWrapper {
         try {
             requestBody = StreamUtils.copyToByteArray(request.getInputStream());
             jsonText = new String(requestBody, "UTF-8");
-            log.info(" ## request params ->{}", jsonText);
         } catch (IOException e) {
             e.printStackTrace();
         }
