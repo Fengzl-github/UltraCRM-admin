@@ -33,7 +33,7 @@ public class RequestBodyWrapper extends HttpServletRequestWrapper {
     }
 
     // 传入是JSON格式 转换成JSONObject
-    public JSONObject getJSONObject() throws UnsupportedEncodingException {
+    public JSONObject getJSONObject() {
         if (jsonObject != null) {
             return jsonObject;
         }
@@ -62,7 +62,7 @@ public class RequestBodyWrapper extends HttpServletRequestWrapper {
         final ByteArrayInputStream bais = new ByteArrayInputStream(requestBody);
         return new ServletInputStream() {
             @Override
-            public int read() throws IOException {
+            public int read() {
                 return bais.read();
             }
 

@@ -1,7 +1,6 @@
 package com.cn.admin.api.config.resolver;
 
 
-import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.admin.api.constant.LogConstant;
 import com.cn.common.utils.RemoteAddrUtils;
@@ -11,7 +10,6 @@ import org.slf4j.MDC;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * 转换封装json文本成为JsonObject对象，方便后面使用
