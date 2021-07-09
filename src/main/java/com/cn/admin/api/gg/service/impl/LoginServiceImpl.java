@@ -11,9 +11,11 @@ import com.cn.common.exception.FzlException;
 import com.cn.common.vo.ResCode;
 import com.cn.common.vo.ResResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  *@Author fengzhilong
@@ -26,6 +28,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private static final String tokenKey = "adminToken";
 
     @Override
     public ResResult verification(LoginVO loginVO) {
@@ -37,6 +43,10 @@ public class LoginServiceImpl implements LoginService {
         }
         String token = PmJwtToken.getJwtToken(loginVO.getGhid(), JSONObject.toJSONString(user));
         log.info("{},登录成功 -> 生成token：{}", loginVO.getGhid(), token);
+
+        //存储token到redis缓存 失效时间 2分钟
+        redisTemplate.boundHashOps(tokenKey).put(user.getGhid(), token);
+
 
         return ResCode.OK
                 .putData("content", PmAgentConvertet.INSTANCE.toPmAgent(user))
