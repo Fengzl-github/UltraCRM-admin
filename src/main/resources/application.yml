@@ -75,6 +75,16 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
 
+
+#redis配置
+spring:
+  redis:
+    database: 2
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+
+
 logging:
   config: classpath:config/logback-dev.xml
 

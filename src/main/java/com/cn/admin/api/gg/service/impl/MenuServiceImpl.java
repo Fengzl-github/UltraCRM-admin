@@ -5,6 +5,7 @@ import com.cn.admin.api.gg.dto.MenuDTO;
 import com.cn.admin.api.gg.service.MenuService;
 import com.cn.admin.api.mapper.callthink.MenuMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,6 +24,7 @@ public class MenuServiceImpl implements MenuService {
     private MenuMapper menuMapper;
 
     @Override
+    @Cacheable(cacheNames = "menu#60*60*3", key = "'role'+#a0")
     public JSONArray getMenuData(Integer role) {
 
         List<MenuDTO> Menus1 = menuMapper.getMenu1Data(role);
