@@ -27,13 +27,11 @@
                 </el-menu-item>
 
                 <el-menu-item style="float:left;" @click="toggleClick">
-                    <div>
-                        <svg :class="{'hamis-active':asideStyle.isCollapse}" class="hamburger"
-                             viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="164" height="164">
-                            <path fill="#FFF"
-                                  d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 0 0 0-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0 0 14.4 7z"/>
-                        </svg>
-                    </div>
+                    <svg :class="{'hamis-active':asideStyle.isCollapse}" class="hamburger"
+                         viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="164" height="164">
+                        <path fill="#FFF"
+                              d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 0 0 0-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0 0 14.4 7z"/>
+                    </svg>
                 </el-menu-item>
 
                 <el-menu-item class="fr">
@@ -60,9 +58,7 @@
                     </div>
                 </el-menu-item>
                 <el-menu-item class="fr">
-                    <div class="block">
-                        <i class="el-icon-bell"></i>
-                    </div>
+                    <i class="el-icon-bell"></i>
                 </el-menu-item>
             </el-menu>
         </el-header>
@@ -70,8 +66,81 @@
             <el-aside :width="asideStyle.asidewidth">
                 <el-menu :collapse="asideStyle.isCollapse" :collapse-transition="false" :background-color="styleColor"
                          :text-color="textColor" active-text-color="#ffd04b" style="height:100%;">
-                    <tree-menu :list="MenuItems" :iconStyle="iconStyle()"
-                               :class="collClass()"></tree-menu>
+                    <template v-for="item in MenuItems">
+                        <template v-if="item.children">
+                            <el-submenu :index="item.id" :key="item.id">
+                                <template slot="title">
+                                    <i :class="item.icon" :style="iconStyle()"></i>
+                                    <span slot="title">{{ item.title }}</span>
+                                </template>
+                                <template v-for="subItem2 in item.children">
+                                    <template v-if="subItem2.children">
+                                        <el-submenu :index="subItem2.id" :key="subItem2.id">
+                                            <template slot="title">
+                                                <i :class="subItem2.icon" :style="iconStyle()"></i>
+                                                <span slot="title">{{ subItem2.title }}</span>
+                                            </template>
+                                            <template v-for="subItem3 in subItem2.children">
+                                                <template v-if="subItem3.children">
+                                                    <el-submenu :index="subItem3.id" :key="subItem3.id">
+                                                        <template slot="title">
+                                                            <i :class="subItem3.icon" :style="iconStyle()"></i>
+                                                            <span slot="title">{{ subItem3.title }}</span>
+                                                        </template>
+                                                        <template v-for="subItem4 in subItem3.children">
+                                                            <template v-if="subItem4.children">
+                                                                <el-submenu :index="subItem4.id" :key="subItem4.id">
+                                                                    <template slot="title">
+                                                                        <i :class="subItem4.icon" :style="iconStyle()"></i>
+                                                                        <span slot="title">{{ subItem4.title }}</span>
+                                                                    </template>
+                                                                    <template v-for="subItem5 in subItem4.children">
+                                                                        <el-menu-item :index="subItem5.id" :key="subItem5.id"
+                                                                                      @click="addTab(subItem5.id, subItem5.title, subItem5.url)">
+                                                                            <i :class="subItem5.icon" :style="iconStyle()"></i>
+                                                                            <span slot="title">{{ subItem5.title }}</span>
+                                                                        </el-menu-item>
+                                                                    </template>
+                                                                </el-submenu>
+                                                            </template>
+                                                            <template v-else>
+                                                                <el-menu-item :index="subItem4.id" :key="subItem4.id"
+                                                                              @click="addTab(subItem4.id, subItem4.title, subItem4.url)">
+                                                                    <i :class="subItem4.icon" :style="iconStyle()"></i>
+                                                                    <span slot="title">{{ subItem4.title }}</span>
+                                                                </el-menu-item>
+                                                            </template>
+                                                        </template>
+                                                    </el-submenu>
+                                                </template>
+                                                <template v-else>
+                                                    <el-menu-item :index="subItem3.id" :key="subItem3.id"
+                                                                  @click="addTab(subItem3.id, subItem3.title, subItem3.url)">
+                                                        <i :class="subItem3.icon" :style="iconStyle()"></i>
+                                                        <span slot="title">{{ subItem3.title }}</span>
+                                                    </el-menu-item>
+                                                </template>
+                                            </template>
+                                        </el-submenu>
+                                    </template>
+                                    <template v-else>
+                                        <el-menu-item :index="subItem2.id" :key="subItem2.id"
+                                                      @click="addTab(subItem2.id, subItem2.title, subItem2.url)">
+                                            <i :class="subItem2.icon" :style="iconStyle()"></i>
+                                            <span slot="title">{{ subItem2.title }}</span>
+                                        </el-menu-item>
+                                    </template>
+                                </template>
+                            </el-submenu>
+                        </template>
+                        <template v-else>
+                            <el-menu-item :index="item.id" :key="item.id"
+                                          @click="addTab(item.id, item.title, item.url)">
+                                <i :class="item.icon" :style="iconStyle()"></i>
+                                <span slot="title">{{ item.title }}</span>
+                            </el-menu-item>
+                        </template>
+                    </template>
                 </el-menu>
             </el-aside>
             <el-main>
@@ -105,39 +174,8 @@
         </el-container>
     </el-container>
 </div>
-<template id="myTreeMenus">
-    <div>
-        <template v-for="item in list">
-            <template v-if="item.children">
-                <el-submenu :index="item.id" :key="item.id">
-                    <template slot="title">
-                        <i :class="item.icon" :style="iconStyle"></i>
-                        <span slot="title">{{ item.title }}</span>
-                    </template>
-                    <tree-menu :list="item.children"></tree-menu>
-                </el-submenu>
-            </template>
-            <template v-else>
-                <el-menu-item :index="item.id" :key="item.id" @click="addTab(item.id,item.title,item.url)">
-                    <i :class="item.icon" :style="iconStyle"></i>
-                    <span slot="title">{{ item.title }}</span>
-                </el-menu-item>
-            </template>
-        </template>
-    </div>
-</template>
 </body>
 <script>
-    Vue.component('tree-menu', {
-        props: ['list', 'iconStyle'],
-        data: function () {
-            return {
-                list: [],
-                iconStyle: ''
-            }
-        },
-        template: "#myTreeMenus"
-    });
     var vData = {
         defalutColor: 'rgb(25, 50, 92)',
         userInfo: {
@@ -193,8 +231,7 @@
             errorHandler,
             addTab,
             removeTab,
-            dblclickIfream,
-            collClass
+            dblclickIfream
         }
 
 
@@ -208,14 +245,6 @@
         }
     }
 
-    function collClass() {
-        if (vData.asideStyle.isCollapse) {
-            return "el-menu--collapse el-menu";
-        } else {
-            return "el-submenu";
-        }
-
-    }
 
     function handleCommand(command) {
         if (command === "lout") {
@@ -280,12 +309,6 @@
     function toggleClick() { //切换左侧菜单折叠效果
         vData.asideStyle.isCollapse = !vData.asideStyle.isCollapse;
         vData.asideStyle.asidewidth = (vData.asideStyle.isCollapse == true ? "65px" : "250px");
-
-        if (vData.asideStyle.isCollapse) {
-            $(".el-submenu").attr('class', 'el-menu--collapse el-menu');
-        } else {
-            $(".el-menu--collapse el-menu").attr('class', 'el-submenu');
-        }
     }
 
 
@@ -440,6 +463,9 @@
         height: 30px;
         margin-right: 10px;
         border-radius: 50%;
+    }
+    .el-tooltip{
+        display: inherit !important;
     }
 
     * {
