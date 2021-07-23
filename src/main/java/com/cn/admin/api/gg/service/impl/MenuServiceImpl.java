@@ -112,8 +112,7 @@ public class MenuServiceImpl implements MenuService {
         MenuDTO targetMenu = menuMapper.findByMid(menuEditVO.getTargetId());
         String sourcePid = sourceMenu.getPid();
         String targetPid = targetMenu.getPid();
-
-        if (menuEditVO.getDropType().equals("prev")){ //前
+        if (menuEditVO.getDropType().equals("before")){ //前
             if (sourcePid.equals(targetPid)){
                 //排序继承目标节点,目标节点及以后所有节点排序+1
                 menuMapper.updateMenuSortByMid(targetMenu.getMenuSort(), menuEditVO.getSourceId());
@@ -123,17 +122,15 @@ public class MenuServiceImpl implements MenuService {
             }else {
                 //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
             }
-            System.out.println("prev");
         }else if (menuEditVO.getDropType().equals("inner")){ // 中
             //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
             System.out.println("inner");
-        }else if (menuEditVO.getDropType().equals("next")){ //后
+        }else if (menuEditVO.getDropType().equals("after")){ //后
             if (sourcePid.equals(targetPid)){
                 //目标节点以后所有节点排序+2,排序继承目标节点+1
             }else {
                 //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
             }
-            System.out.println("next");
         }else {
             throw new FzlException("拖拽类型有误");
         }

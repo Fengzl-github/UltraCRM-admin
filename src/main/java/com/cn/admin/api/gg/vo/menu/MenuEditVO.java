@@ -19,7 +19,7 @@ public class MenuEditVO {
     @NotBlank(message="缺少目标节点id")
     private String targetId;
     //拖拽类型
-    //'prev'、'inner' 和 'next'，分别表示放置在目标节点前、插入至目标节点和放置在目标节点后
+    //'before'、'inner' 和 'after'，分别表示放置在目标节点前、插入至目标节点和放置在目标节点后
     @NotBlank(message = "缺少拖拽类型")
     private String dropType;
 }
