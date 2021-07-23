@@ -28,6 +28,8 @@ public interface GroupMapper {
 
     void removeMember(Integer id);
 
+    void removeMemberByGhid(String ghid);
+
     void insertGroupMember(GroupMemberDTO memberInfo);
 
     List<GroupMemberDTO> findMemberByGroupId(Integer groupId);

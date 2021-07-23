@@ -68,6 +68,11 @@
         where id = #{id}
     </delete>
 
+    <delete id="removeMemberByGhid" parameterType="java.lang.String">
+        delete from t_group_member
+        where ghid = #{ghid}
+    </delete>
+
     <insert id="insertGroupMember" parameterType="com.cn.admin.api.gg.dto.GroupMemberDTO">
         insert into t_group_member(
             ghid,name,group_id,group_name

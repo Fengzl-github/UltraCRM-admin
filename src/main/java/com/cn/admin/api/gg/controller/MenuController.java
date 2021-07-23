@@ -5,14 +5,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.cn.admin.api.base.PmAgent;
 import com.cn.admin.api.base.PmJwtToken;
 import com.cn.admin.api.gg.service.MenuService;
+import com.cn.admin.api.gg.vo.menu.MenuEditVO;
 import com.cn.common.vo.ResCode;
 import com.cn.common.vo.ResResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  *@Author fengzhilong
@@ -26,6 +29,13 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
+    /**
+     * @Author fengzhilong
+     * @Desc 获取登录后菜单列表
+     * @Date 2021/7/22 16:02
+     * @param request
+     * @return com.cn.common.vo.ResResult
+     **/
     @PostMapping("/getMenuData")
     public ResResult myindex(HttpServletRequest request) {
         Integer role = 0;
@@ -40,5 +50,31 @@ public class MenuController {
         JSONArray menuData = menuService.getMenuData(role);
 
         return ResCode.OK.setData(menuData);
+    }
+
+    /**
+     * @Author fengzhilong
+     * @Desc 菜单管理-全部菜单数据
+     * @Date 2021/7/22 16:03
+     * @param
+     * @return com.cn.common.vo.ResResult
+     **/
+    @PostMapping("/getEditMenuData")
+    public ResResult getEditMenuData(Integer role, Integer reset){
+
+        JSONArray json = menuService.getEditMenuData(role);
+        if (reset == 1){
+            log.info("[重置缓存] ## role -> {}; data-> {}", role, json.toJSONString());
+        }
+        return ResCode.OK.setData(json);
+    }
+
+
+    @PostMapping("/updateMenuNode")
+    public ResResult updateMenuNode(@Valid @RequestBody MenuEditVO menuEditVO){
+
+        menuService.updateMenuNode(menuEditVO);
+
+        return ResCode.OK.msg("操作成功");
     }
 }

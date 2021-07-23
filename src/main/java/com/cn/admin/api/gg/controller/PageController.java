@@ -34,8 +34,14 @@ public class PageController {
     public String groupList() {
         return "user/groupList";
     }
+
     @GetMapping("/userManagement")
     public String userManagement() {
         return "user/userManagement";
+    }
+
+    @GetMapping("/menuList")
+    public String menuList() {
+        return "menu/menuList";
     }
 }

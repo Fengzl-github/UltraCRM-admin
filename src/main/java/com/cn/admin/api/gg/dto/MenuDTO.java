@@ -14,9 +14,17 @@ public class MenuDTO {
 
     private String title;
 
-    private String mId;
+    private String mid;
+
+    private String pid;
 
     private String url;
 
     private String icon;
+
+    private Integer menuSort;
+
+    private Integer role;
+
+    private Integer visible;
 }

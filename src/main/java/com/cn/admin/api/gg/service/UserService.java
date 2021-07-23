@@ -31,4 +31,13 @@ public interface UserService {
      * @return com.cn.common.vo.ResResult
      **/
     void saveUserInfo(UserVO userVO);
+
+    /**
+     * @Author fengzhilong 
+     * @Desc 删除用户
+     * @Date 2021/7/19 14:13
+     * @param id 
+     * @return void
+     **/
+    void removeUser(String id);
 }

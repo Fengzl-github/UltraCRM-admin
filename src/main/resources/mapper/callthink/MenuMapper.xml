@@ -5,23 +5,61 @@
         <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="url" property="url" jdbcType="VARCHAR"/>
-        <result column="m_id" property="mId" jdbcType="VARCHAR"/>
+        <result column="mid" property="mid" jdbcType="VARCHAR"/>
+        <result column="pid" property="pid" jdbcType="VARCHAR"/>
         <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="menu_sort" property="menuSort" jdbcType="INTEGER"/>
+        <result column="role" property="role" jdbcType="INTEGER"/>
+        <result column="visible" property="visible" jdbcType="INTEGER"/>
     </resultMap>
 
     <!-- 获取一级菜单-->
     <select id="getMenu1Data" resultMap="Menu" parameterType="integer">
-        select id,title,url,m_id, icon
+        select id,title,url,mid, icon, role, visible
         from t_menu_bs
-        where visible = 1 and p_id = '0' and role >= #{role}
+        where visible = 1 and pid = '0' and role >= #{role}
         order by menu_sort asc
     </select>
 
     <!-- 获取下级菜单-->
     <select id="getNextMenuData" resultMap="Menu">
-        select id,title,url,m_id, icon
+        select id,title,url,mid, icon
         from t_menu_bs
-        where visible = 1 and p_id = #{pId} and role >= #{role}
+        where visible = 1 and pid = #{pid} and role >= #{role}
         order by menu_sort asc
     </select>
+
+
+    <!-- 获取一级菜单-->
+    <select id="getAllMenu1Data" resultMap="Menu" parameterType="integer">
+        select id,title,url,mid, icon, role, visible
+        from t_menu_bs
+        where pid = '0' and role >= #{role}
+        order by menu_sort asc
+    </select>
+    <!--获取下级菜单,全部-->
+    <select id="getNextAllMenuData" resultMap="Menu">
+        select id,title,url,mid,icon,role,visible
+        from t_menu_bs
+        where pid = #{pid} and role >= #{role}
+        order by menu_sort asc
+    </select>
+
+    <!--根据mid获取菜单数据-->
+    <select id="findByMid" resultMap="Menu">
+        select id,title,url,mid, pid,icon,menu_sort, role, visible
+        from t_menu_bs
+        where mid = #{mid}
+    </select>
+
+    <!--修改排序-->
+    <update id="updateMenuSortByMid">
+        update t_menu_bs set menu_sort = #{menuSort}
+        where mid = #{mid}
+    </update>
+
+    <update id="addSpaceForMenuSort">
+        update t_menu_bs set menu_sort = menu_sort+#{space}
+        where menu_sort > #{menuSort} and pid = #{pid}
+    </update>
 </mapper>

@@ -6,6 +6,7 @@ import com.cn.admin.api.gg.mapstruct.user.UserConvertet;
 import com.cn.admin.api.gg.service.UserService;
 import com.cn.admin.api.gg.vo.user.UserQueryVO;
 import com.cn.admin.api.gg.vo.user.UserVO;
+import com.cn.admin.api.mapper.callthink.GroupMapper;
 import com.cn.admin.api.mapper.callthink.UserMapper;
 import com.cn.admin.api.util.JsonPage;
 import com.cn.common.exception.FzlException;
@@ -26,6 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private GroupMapper groupMapper;
 
 
     /**
@@ -70,6 +73,24 @@ public class UserServiceImpl implements UserService {
         }
 
         userMapper.insertOrUpdate(user);
+
+    }
+
+
+    /**
+     * @Author fengzhilong
+     * @Desc 删除用户
+     * @Date 2021/7/19 13:42
+     * @param ghid
+     * @return void
+     **/
+    @Override
+    public void removeUser(String ghid) {
+
+        userMapper.removeUser(ghid);
+
+        groupMapper.removeMemberByGhid(ghid);
+
 
     }
 }

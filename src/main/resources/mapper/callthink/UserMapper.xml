@@ -97,6 +97,11 @@
     </select>
 
 
+    <update id="removeUser" parameterType="java.lang.String">
+        update t_user set is_del = 1 where id = #{id}
+    </update>
+
+
     <insert id="insertOrUpdate" parameterType="com.cn.admin.api.gg.dto.UserDTO">
         insert into t_user(
             id,

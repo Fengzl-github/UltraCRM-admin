@@ -28,4 +28,6 @@ public interface UserMapper {
     List<UserGroupDTO> findAllUser(UserQueryVO userQueryVO);
 
     void insertOrUpdate(UserDTO user);
+
+    void removeUser(String id);
 }

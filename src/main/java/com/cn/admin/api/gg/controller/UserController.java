@@ -14,6 +14,7 @@ import com.cn.common.vo.ResCode;
 import com.cn.common.vo.ResResult;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -158,7 +159,20 @@ public class UserController {
     }
 
 
-    // 删除用户
+    /**
+     * @Author fengzhilong
+     * @Desc 删除用户
+     * @Date 2021/7/19 14:13
+     * @param ghid
+     * @return void
+     **/
+    @PostMapping("/removeUser")
+    public ResResult removeUser(String ghid) {
+
+        userService.removeUser(ghid);
+
+        return ResCode.OK.msg("删除成功");
+    }
 
 
     //重置密码
