@@ -60,16 +60,21 @@ public class MenuController {
      * @return com.cn.common.vo.ResResult
      **/
     @PostMapping("/getEditMenuData")
-    public ResResult getEditMenuData(Integer role, Integer reset){
+    public ResResult getEditMenuData(Integer role){
 
         JSONArray json = menuService.getEditMenuData(role);
-        if (reset == 1){
-            log.info("[重置缓存] ## role -> {}; data-> {}", role, json.toJSONString());
-        }
+        
         return ResCode.OK.setData(json);
     }
 
 
+    /**
+     * @Author fengzhilong 
+     * @Desc 拖拽修改菜单
+     * @Date 2021/7/26 15:30
+     * @param menuEditVO 
+     * @return com.cn.common.vo.ResResult
+     **/
     @PostMapping("/updateMenuNode")
     public ResResult updateMenuNode(@Valid @RequestBody MenuEditVO menuEditVO){
 

@@ -26,5 +26,5 @@ public interface MenuMapper {
 
     void updateMenuSortByMid(@Param("menuSort") Integer menuSort, @Param("mid") String mid);
 
-    void addSpaceForMenuSort(@Param("space") int space, @Param("menuSort") Integer menuSort, @Param("pid") String pid);
+    void addSpaceForMenuSort(@Param("space") int space, @Param("littleSort") Integer littleSort, @Param("bigSort") Integer bigSort, @Param("pid") String pid);
 }

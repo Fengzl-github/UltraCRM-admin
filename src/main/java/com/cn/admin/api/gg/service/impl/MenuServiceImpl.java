@@ -105,33 +105,51 @@ public class MenuServiceImpl implements MenuService {
      **/
     @Transactional
     @Override
-    public void updateMenuNode(MenuEditVO menuEditVO) {
+    public synchronized void updateMenuNode(MenuEditVO menuEditVO) {
 
         // 获取拖拽节点和目标节点菜单数据
         MenuDTO sourceMenu = menuMapper.findByMid(menuEditVO.getSourceId());
         MenuDTO targetMenu = menuMapper.findByMid(menuEditVO.getTargetId());
         String sourcePid = sourceMenu.getPid();
         String targetPid = targetMenu.getPid();
-        if (menuEditVO.getDropType().equals("before")){ //前
-            if (sourcePid.equals(targetPid)){
-                //排序继承目标节点,目标节点及以后所有节点排序+1
-                menuMapper.updateMenuSortByMid(targetMenu.getMenuSort(), menuEditVO.getSourceId());
+        if (menuEditVO.getDropType().equals("before")) { //前
+            if (sourcePid.equals(targetPid)) {
+                //上移
+                if (sourceMenu.getMenuSort() > targetMenu.getMenuSort()) {
+                    //目标节点-源节点之间,排序+1;源节点继承目标节点
+                    menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort(), sourceMenu.getMenuSort(), targetPid);
 
-                menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort()-1, targetPid);
+                    menuMapper.updateMenuSortByMid(targetMenu.getMenuSort(), menuEditVO.getSourceId());
+                } else {//下移
+                    //源节点-目标节点-1之间,排序-1;源节点继承目标节点
+                    menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort() + 1, targetMenu.getMenuSort(), targetPid);
 
-            }else {
+                    menuMapper.updateMenuSortByMid(targetMenu.getMenuSort() - 1, menuEditVO.getSourceId());
+                }
+            } else {
                 //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
             }
-        }else if (menuEditVO.getDropType().equals("inner")){ // 中
+        } else if (menuEditVO.getDropType().equals("inner")) { // 中
             //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
             System.out.println("inner");
-        }else if (menuEditVO.getDropType().equals("after")){ //后
-            if (sourcePid.equals(targetPid)){
-                //目标节点以后所有节点排序+2,排序继承目标节点+1
-            }else {
+        } else if (menuEditVO.getDropType().equals("after")) { //后
+            if (sourcePid.equals(targetPid)) {
+                //上移
+                if (sourceMenu.getMenuSort() > targetMenu.getMenuSort()) {
+                    //目标节点-源节点之间,排序+1;源节点继承目标节点
+                    menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort() + 1, sourceMenu.getMenuSort(), targetPid);
+
+                    menuMapper.updateMenuSortByMid(targetMenu.getMenuSort() + 1, menuEditVO.getSourceId());
+                } else {//下移
+                    //源节点-目标节点-1之间,排序-1;源节点继承目标节点
+                    menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort() + 1, targetMenu.getMenuSort() + 1, targetPid);
+
+                    menuMapper.updateMenuSortByMid(targetMenu.getMenuSort(), menuEditVO.getSourceId());
+                }
+            } else {
                 //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
             }
-        }else {
+        } else {
             throw new FzlException("拖拽类型有误");
         }
         // 1.父id相同,改变排序

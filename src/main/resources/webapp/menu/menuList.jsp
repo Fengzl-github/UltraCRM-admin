@@ -12,8 +12,8 @@
                                 <el-input placeholder="输入关键字进行过滤" v-model="filterText">
                                 </el-input>
                                 <!-- default-expand-all:是否默认展开所有节点
-        draggable:开启拖拽
-        -->
+                                draggable:开启拖拽
+                                -->
                                 <el-tree ref="tree" class="filter-tree" empty-text="没有查到数据哦" :data="data" node-key="id"
                                         default-expand-all draggable :filter-node-method="filterNode"
                                         @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
@@ -142,8 +142,10 @@
                                         .then(function (response) {
                                                 let res = response.data;
                                                 console.log("拖拽结果", res);
-                                                // myEl.elAlert(res.code, res.msg);
-                                                // getMenuData(1);
+                                                if (res.code !== 200) {
+                                                        myEl.elAlert(res.code, res.msg);
+                                                        getMenuData();
+                                                }
                                         })
                                         .catch(function (error) {
                                                 console.log("系统异常");
@@ -152,13 +154,13 @@
 
                         $(function () {
                                 //获取数据
-                                getMenuData(0);
+                                getMenuData();
 
                         });
 
 
-                        function getMenuData(reset) {
-                                axios.post('${rootURL}/getEditMenuData', { "role": 0, "reset": reset})
+                        function getMenuData() {
+                                axios.post('${rootURL}/getEditMenuData', { "role": 0 })
                                         .then(function (response) {
                                                 let res = response.data;
                                                 vData.data = res.data;

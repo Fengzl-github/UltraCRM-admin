@@ -60,6 +60,6 @@
 
     <update id="addSpaceForMenuSort">
         update t_menu_bs set menu_sort = menu_sort+#{space}
-        where menu_sort > #{menuSort} and pid = #{pid}
+        where menu_sort &gt;= #{littleSort} and menu_sort &lt; #{bigSort} and pid = #{pid}
     </update>
 </mapper>
