@@ -39,9 +39,12 @@
     </select>
     <!--获取下级菜单,全部-->
     <select id="getNextAllMenuData" resultMap="Menu">
-        select id,title,url,mid,icon,role,visible
+        select id,title,url,mid,icon,role,visible,pid,menu_sort
         from t_menu_bs
-        where pid = #{pid} and role >= #{role}
+        where pid = #{pid}
+        <if test="role != null and role != ''">
+            and role >= #{role}
+        </if>
         order by menu_sort asc
     </select>
 
@@ -60,6 +63,40 @@
 
     <update id="addSpaceForMenuSort">
         update t_menu_bs set menu_sort = menu_sort+#{space}
+        where menu_sort &gt;= #{littleSort} and pid = #{pid}
+    </update>
+
+    <update id="updateMidForMenuSort">
+        update t_menu_bs set mid = CONCAT(pid,'-',menu_sort)
+        where menu_sort &gt;= #{menuSort} and pid = #{pid}
+    </update>
+
+    <update id="addSpaceForMenuSortBwn">
+        update t_menu_bs set menu_sort = menu_sort+#{space}
         where menu_sort &gt;= #{littleSort} and menu_sort &lt; #{bigSort} and pid = #{pid}
     </update>
+
+
+    <update id="updateMidAndPidAndSort">
+        update t_menu_bs
+        <set>
+            <if test="mid != null and mid != ''">
+                mid = #{mid},
+            </if>
+            <if test="pid != null and pid != ''">
+                pid=#{pid},
+            </if>
+            <if test="menuSort != null and menuSort != 0">
+                menu_sort = #{menuSort},
+            </if>
+        </set>
+        where mid = #{sourceMid}
+    </update>
+
+
+    <select id="getMaxSort" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select max(menu_sort) from t_menu_bs
+        where pid = #{pid}
+
+    </select>
 </mapper>

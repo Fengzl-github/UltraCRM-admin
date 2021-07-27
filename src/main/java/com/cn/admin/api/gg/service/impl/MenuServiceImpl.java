@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 /**
@@ -102,8 +104,15 @@ public class MenuServiceImpl implements MenuService {
      * @Date 2021/7/23 15:32
      * @param menuEditVO
      * @return void
+     *
+     * @Transactional - 默认情况下只对unchecked异常进行回滚,对checked异常不回滚
+     *  如果想checked异常也回滚,添加rollbackFor属性
+     *  unchecked异常: 派生于Error和runtimeException的异常,如NullPointerException ArrayIndexOutOfBoundsException ArithmeticException IllegalArgumentException OutOfMemoryError StackOverflowError
+     *  checked异常: 继承自Exception的异常,如ClassNotFoundException IOException sqlException timeoutException
+     *  注: 所有的Error、RuntimeException及其子类都属于 unchecked exception 非检查异常
+     *     其他异常属于 checked exception 必检异常
      **/
-    @Transactional
+    @Transactional(rollbackFor = SQLException.class)
     @Override
     public synchronized void updateMenuNode(MenuEditVO menuEditVO) {
 
@@ -117,49 +126,95 @@ public class MenuServiceImpl implements MenuService {
                 //上移
                 if (sourceMenu.getMenuSort() > targetMenu.getMenuSort()) {
                     //目标节点-源节点之间,排序+1;源节点继承目标节点
-                    menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort(), sourceMenu.getMenuSort(), targetPid);
+                    menuMapper.addSpaceForMenuSortBwn(1, targetMenu.getMenuSort(), sourceMenu.getMenuSort(), targetPid);
 
                     menuMapper.updateMenuSortByMid(targetMenu.getMenuSort(), menuEditVO.getSourceId());
                 } else {//下移
                     //源节点-目标节点-1之间,排序-1;源节点继承目标节点
-                    menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort() + 1, targetMenu.getMenuSort(), targetPid);
+                    menuMapper.addSpaceForMenuSortBwn(-1, sourceMenu.getMenuSort() + 1, targetMenu.getMenuSort(), targetPid);
 
                     menuMapper.updateMenuSortByMid(targetMenu.getMenuSort() - 1, menuEditVO.getSourceId());
                 }
             } else {
-                //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
+                //大于等于目标节点排序 +1; 源节点mid修改为目标节点pid+"-"+max(sort);源节点sort修改为目标节点sort
+                //有子节点改变子节点mid和pid;大于等于源节点sort -1
+                menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort(), targetPid);
+                menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort(), sourcePid);
+                String newMid = targetPid + "-" + menuMapper.getMaxSort(targetPid);
+                if (targetPid.equals("0")) {
+                    newMid = menuMapper.getMaxSort(targetPid) + "";
+                }
+                //递归修改源节点下子节点数据
+                updateSubMidAndPid(menuEditVO.getSourceId(), newMid);
+                menuMapper.updateMidAndPidAndSort(newMid, targetPid, menuEditVO.getSourceId(), targetMenu.getMenuSort());
+                if (!sourcePid.equals("0")) {
+                    menuMapper.updateMidForMenuSort(sourcePid, sourceMenu.getMenuSort());
+                }
             }
         } else if (menuEditVO.getDropType().equals("inner")) { // 中
             //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
-            System.out.println("inner");
+            int menuSort = 1;
+            List<MenuDTO> nextAllMenuData = menuMapper.getNextAllMenuData(menuEditVO.getTargetId(), null);
+            menuSort += nextAllMenuData.size();
+            String newMid = menuEditVO.getTargetId() + "-" + menuSort;
+            menuMapper.updateMidAndPidAndSort(newMid, menuEditVO.getTargetId(), menuEditVO.getSourceId(), menuSort);
+            menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort(), sourcePid);
+            //递归修改源节点下子节点数据
+            updateSubMidAndPid(menuEditVO.getSourceId(), newMid);
         } else if (menuEditVO.getDropType().equals("after")) { //后
             if (sourcePid.equals(targetPid)) {
                 //上移
                 if (sourceMenu.getMenuSort() > targetMenu.getMenuSort()) {
                     //目标节点-源节点之间,排序+1;源节点继承目标节点
-                    menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort() + 1, sourceMenu.getMenuSort(), targetPid);
+                    menuMapper.addSpaceForMenuSortBwn(1, targetMenu.getMenuSort() + 1, sourceMenu.getMenuSort(), targetPid);
 
                     menuMapper.updateMenuSortByMid(targetMenu.getMenuSort() + 1, menuEditVO.getSourceId());
                 } else {//下移
                     //源节点-目标节点-1之间,排序-1;源节点继承目标节点
-                    menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort() + 1, targetMenu.getMenuSort() + 1, targetPid);
+                    menuMapper.addSpaceForMenuSortBwn(-1, sourceMenu.getMenuSort() + 1, targetMenu.getMenuSort() + 1, targetPid);
 
                     menuMapper.updateMenuSortByMid(targetMenu.getMenuSort(), menuEditVO.getSourceId());
                 }
             } else {
-                //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
+                //大于等于目标节点+1的排序 +1; 源节点mid修改为目标节点pid+"-"+max(sort);源节点sort修改为目标节点sort
+                //有子节点改变子节点mid和pid;大于等于源节点+1的sort -1
+                menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort() + 1, targetPid);
+                menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort() + 1, sourcePid);
+                String newMid = targetPid + "-" + menuMapper.getMaxSort(targetPid);
+                if (targetPid.equals("0")) {
+                    newMid = menuMapper.getMaxSort(targetPid) + "";
+                }
+                //递归修改源节点下子节点数据
+                updateSubMidAndPid(menuEditVO.getSourceId(), newMid);
+                menuMapper.updateMidAndPidAndSort(newMid, targetPid, menuEditVO.getSourceId(), targetMenu.getMenuSort()+1);
+                if (!sourcePid.equals("0")) {
+                    menuMapper.updateMidForMenuSort(sourcePid, sourceMenu.getMenuSort());
+                }
             }
         } else {
             throw new FzlException("拖拽类型有误");
         }
-        // 1.父id相同,改变排序
-
-        // 1.1 加入
-
-
-        // 2.父id不同,改变拖拽节点的父id和排序
-
     }
+
+    /**
+     * 递归修改子菜单的mid和pid
+     * @param sourceId 拖拽节点mid
+     * @param newMid 拖拽节点新的mid
+     * 拖拽节点下有子节点,pid修改为newMid,mid修改为newMid+'-'+sort
+     **/
+    @Transactional(rollbackFor = SQLException.class)
+    public void updateSubMidAndPid(String sourceId, String newMid) {
+        List<MenuDTO> nextAllMenuData = menuMapper.getNextAllMenuData(sourceId, null);
+        String nextMid = "", newPid = "";
+        for (MenuDTO menu : nextAllMenuData) {
+            nextMid = menu.getMid();
+            newPid = newMid + "-" + menu.getMenuSort();
+            menuMapper.updateMidAndPidAndSort(newPid, newMid, nextMid, null);
+
+            updateSubMidAndPid(nextMid, newPid);
+        }
+    }
+
 
     /**
      * @Desc 递归生成菜单数据

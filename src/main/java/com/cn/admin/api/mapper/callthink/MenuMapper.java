@@ -2,6 +2,7 @@ package com.cn.admin.api.mapper.callthink;
 
 import com.cn.admin.api.gg.dto.MenuDTO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,5 +27,13 @@ public interface MenuMapper {
 
     void updateMenuSortByMid(@Param("menuSort") Integer menuSort, @Param("mid") String mid);
 
-    void addSpaceForMenuSort(@Param("space") int space, @Param("littleSort") Integer littleSort, @Param("bigSort") Integer bigSort, @Param("pid") String pid);
+    void addSpaceForMenuSort(@Param("space") int space, @Param("littleSort") Integer littleSort, @Param("pid") String pid);
+
+    void addSpaceForMenuSortBwn(@Param("space") int space, @Param("littleSort") Integer littleSort, @Param("bigSort") Integer bigSort, @Param("pid") String pid);
+
+    void updateMidForMenuSort(@Param("pid") String pid, @Param("menuSort") Integer menuSort);
+
+    void updateMidAndPidAndSort(@Param("mid") String mid, @Param("pid") String pid, @Param("sourceMid") String sourceMid, @Param("menuSort") Integer menuSort);
+
+    Integer getMaxSort(String pid);
 }
