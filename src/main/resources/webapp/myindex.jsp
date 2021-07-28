@@ -20,8 +20,8 @@
                     <svg t="1563351300111" class="icon" viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="3372" width="32" height="32">
                         <path
-                                d="M224 272c-27.2 0-48-20.8-48-48s20.8-48 48-48 48 20.8 48 48-20.8 48-48 48z m576 0c-27.2 0-48-20.8-48-48s20.8-48 48-48 48 20.8 48 48-20.8 48-48 48zM512 864c-180.8 0-344-108.8-412.8-275.2-6.4-16 1.6-35.2 17.6-41.6 16-6.4 35.2 1.6 41.6 17.6C217.6 707.2 356.8 800 512 800c155.2 0 294.4-92.8 355.2-236.8 6.4-16 25.6-24 41.6-17.6 16 6.4 24 25.6 17.6 41.6C856 755.2 692.8 864 512 864z"
-                                p-id="3373" :fill="textColor">
+                            d="M224 272c-27.2 0-48-20.8-48-48s20.8-48 48-48 48 20.8 48 48-20.8 48-48 48z m576 0c-27.2 0-48-20.8-48-48s20.8-48 48-48 48 20.8 48 48-20.8 48-48 48zM512 864c-180.8 0-344-108.8-412.8-275.2-6.4-16 1.6-35.2 17.6-41.6 16-6.4 35.2 1.6 41.6 17.6C217.6 707.2 356.8 800 512 800c155.2 0 294.4-92.8 355.2-236.8 6.4-16 25.6-24 41.6-17.6 16 6.4 24 25.6 17.6 41.6C856 755.2 692.8 864 512 864z"
+                            p-id="3373" :fill="textColor">
                         </path>
                     </svg>
                 </el-menu-item>
@@ -91,14 +91,18 @@
                                                             <template v-if="subItem4.children">
                                                                 <el-submenu :index="subItem4.id" :key="subItem4.id">
                                                                     <template slot="title">
-                                                                        <i :class="subItem4.icon" :style="iconStyle()"></i>
+                                                                        <i :class="subItem4.icon"
+                                                                           :style="iconStyle()"></i>
                                                                         <span slot="title">{{ subItem4.title }}</span>
                                                                     </template>
                                                                     <template v-for="subItem5 in subItem4.children">
-                                                                        <el-menu-item :index="subItem5.id" :key="subItem5.id"
+                                                                        <el-menu-item :index="subItem5.id"
+                                                                                      :key="subItem5.id"
                                                                                       @click="addTab(subItem5.id, subItem5.title, subItem5.url)">
-                                                                            <i :class="subItem5.icon" :style="iconStyle()"></i>
-                                                                            <span slot="title">{{ subItem5.title }}</span>
+                                                                            <i :class="subItem5.icon"
+                                                                               :style="iconStyle()"></i>
+                                                                            <span
+                                                                                slot="title">{{ subItem5.title }}</span>
                                                                         </el-menu-item>
                                                                     </template>
                                                                 </el-submenu>
@@ -464,7 +468,8 @@
         margin-right: 10px;
         border-radius: 50%;
     }
-    .el-tooltip{
+
+    .el-tooltip {
         display: inherit !important;
     }
 

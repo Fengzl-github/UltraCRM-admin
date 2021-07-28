@@ -94,8 +94,8 @@
     </update>
 
 
-    <select id="getMaxSort" resultType="java.lang.Integer" parameterType="java.lang.String">
-        select max(menu_sort) from t_menu_bs
+    <select id="getMaxMid" resultType="java.lang.String" parameterType="java.lang.String">
+        select max(mid) from t_menu_bs
         where pid = #{pid}
 
     </select>

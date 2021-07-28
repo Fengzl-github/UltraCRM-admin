@@ -139,17 +139,18 @@ public class MenuServiceImpl implements MenuService {
                 //大于等于目标节点排序 +1; 源节点mid修改为目标节点pid+"-"+max(sort);源节点sort修改为目标节点sort
                 //有子节点改变子节点mid和pid;大于等于源节点sort -1
                 menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort(), targetPid);
-                menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort(), sourcePid);
-                String newMid = targetPid + "-" + menuMapper.getMaxSort(targetPid);
-                if (targetPid.equals("0")) {
-                    newMid = menuMapper.getMaxSort(targetPid) + "";
-                }
+                menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort() + 1, sourcePid);
+                String maxMid = menuMapper.getMaxMid(targetPid);
+
+                int i = Integer.parseInt(maxMid.substring(maxMid.length() - 1)) + 1;
+                String newMid = maxMid.substring(0, maxMid.length() - 1) + i;
+
                 //递归修改源节点下子节点数据
                 updateSubMidAndPid(menuEditVO.getSourceId(), newMid);
                 menuMapper.updateMidAndPidAndSort(newMid, targetPid, menuEditVO.getSourceId(), targetMenu.getMenuSort());
-                if (!sourcePid.equals("0")) {
+                /*if (!sourcePid.equals("0")) {
                     menuMapper.updateMidForMenuSort(sourcePid, sourceMenu.getMenuSort());
-                }
+                }*/
             }
         } else if (menuEditVO.getDropType().equals("inner")) { // 中
             //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
@@ -180,16 +181,16 @@ public class MenuServiceImpl implements MenuService {
                 //有子节点改变子节点mid和pid;大于等于源节点+1的sort -1
                 menuMapper.addSpaceForMenuSort(1, targetMenu.getMenuSort() + 1, targetPid);
                 menuMapper.addSpaceForMenuSort(-1, sourceMenu.getMenuSort() + 1, sourcePid);
-                String newMid = targetPid + "-" + menuMapper.getMaxSort(targetPid);
-                if (targetPid.equals("0")) {
-                    newMid = menuMapper.getMaxSort(targetPid) + "";
-                }
+                String maxMid = menuMapper.getMaxMid(targetPid);
+
+                int i = Integer.parseInt(maxMid.substring(maxMid.length() - 1)) + 1;
+                String newMid = maxMid.substring(0, maxMid.length() - 1) + i;
                 //递归修改源节点下子节点数据
                 updateSubMidAndPid(menuEditVO.getSourceId(), newMid);
-                menuMapper.updateMidAndPidAndSort(newMid, targetPid, menuEditVO.getSourceId(), targetMenu.getMenuSort()+1);
-                if (!sourcePid.equals("0")) {
+                menuMapper.updateMidAndPidAndSort(newMid, targetPid, menuEditVO.getSourceId(), targetMenu.getMenuSort() + 1);
+                /*if (!sourcePid.equals("0")) {
                     menuMapper.updateMidForMenuSort(sourcePid, sourceMenu.getMenuSort());
-                }
+                }*/
             }
         } else {
             throw new FzlException("拖拽类型有误");
