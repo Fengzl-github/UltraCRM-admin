@@ -143,7 +143,7 @@ public class GroupServiceImpl implements GroupService {
 
     /**
      * @Author fengzhilong
-     * @Desc 下拉-信息
+     * @Desc 下拉-组信息
      * @Date 2021/6/15 16:00
      * @param
      * @return java.util.List

@@ -33,6 +33,32 @@
                         </span>
                 </span>
         </el-tree>
+        <el-dialog title="编辑" :visible.sync="dialogVisible" width="40%" center="true">
+            <el-form :model="editData">
+                <el-form-item label="名称" label-width="80px" size="small">
+                    <el-input v-model="editData.label"></el-input>
+                </el-form-item>
+                <el-form-item label="路径" label-width="80px" size="small">
+                    <el-input v-model="editData.url"></el-input>
+                </el-form-item>
+                <el-form-item label="权限" label-width="80px" size="small">
+                    <el-checkbox-group v-model="roleList">
+                        <template v-for="roleItem in roleOptions">
+                            <el-checkbox :label="roleItem.value">{{roleItem.label}}</el-checkbox>
+                        </template>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="图标" label-width="80px" size="small">
+                    <el-input v-model="editData.icon"></el-input>
+                </el-form-item>
+                <el-form-item label="显示" label-width="80px" size="small">
+                    <el-input v-model="editData.visible"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="saveMenu" size="small">保存</el-button>
+            </div>
+        </el-dialog>
     </el-card>
 </div>
 
@@ -48,7 +74,11 @@
             url: 'url',
             role: 'role',
             visible: 'visible'
-        }
+        },
+        dialogVisible: false,
+        editData: {},
+        roleOptions: [],
+        roleList: []
     };
 
     let vm = new Vue({
@@ -123,6 +153,11 @@
             },
             edit(data) {
                 console.log('修改', data);
+                vData.dialogVisible = true;
+                vData.editData = data;
+            },
+            saveMenu() {
+                console.log('保存', vData.roleList);
             }
         },
         watch: {
@@ -151,6 +186,7 @@
     $(function () {
         //获取数据
         getMenuData();
+        getGroupOptions();
 
     });
 
@@ -164,6 +200,17 @@
             .catch(function (error) {
                 console.log("系统异常");
             })
+    }
+
+
+    // 获取权限数据
+    function getGroupOptions() {
+        axios.post('/pub/getRoleOptions')
+            .then(function (response) {
+                let res = response.data;
+                vData.roleOptions = res.data;
+            })
+            .catch()
     }
 </script>
 </body>
