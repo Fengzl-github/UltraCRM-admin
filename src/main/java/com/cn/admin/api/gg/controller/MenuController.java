@@ -6,6 +6,7 @@ import com.cn.admin.api.base.PmAgent;
 import com.cn.admin.api.base.PmJwtToken;
 import com.cn.admin.api.gg.service.MenuService;
 import com.cn.admin.api.gg.vo.menu.MenuEditVO;
+import com.cn.admin.api.gg.vo.menu.MenuVO;
 import com.cn.common.vo.ResCode;
 import com.cn.common.vo.ResResult;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +80,21 @@ public class MenuController {
     public ResResult updateMenuNode(@Valid @RequestBody MenuEditVO menuEditVO){
 
         menuService.updateMenuNode(menuEditVO);
+
+        return ResCode.OK.msg("操作成功");
+    }
+
+    /**
+     * @Author fengzhilong
+     * @Desc 编辑保存菜单
+     * @Date 2021/8/3 11:52
+     * @param menuVO
+     * @return com.cn.common.vo.ResResult
+     **/
+    @PostMapping("/saveMenu")
+    public ResResult saveMenu(@Valid @RequestBody MenuVO menuVO){
+
+        menuService.saveMenu(menuVO);
 
         return ResCode.OK.msg("操作成功");
     }

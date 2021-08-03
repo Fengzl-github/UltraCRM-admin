@@ -17,7 +17,7 @@
     <select id="getMenu1Data" resultMap="Menu" parameterType="integer">
         select id,title,url,mid, icon, role, visible
         from t_menu_bs
-        where visible = 1 and pid = '0' and role >= #{role}
+        where visible = 1 and pid = '0' and role &amp; #{role} &gt; 0
         order by menu_sort asc
     </select>
 
@@ -25,7 +25,7 @@
     <select id="getNextMenuData" resultMap="Menu">
         select id,title,url,mid, icon
         from t_menu_bs
-        where visible = 1 and pid = #{pid} and role >= #{role}
+        where visible = 1 and pid = #{pid} and role &amp; #{role} &gt; 0
         order by menu_sort asc
     </select>
 
@@ -34,7 +34,10 @@
     <select id="getAllMenu1Data" resultMap="Menu" parameterType="integer">
         select id,title,url,mid, icon, role, visible
         from t_menu_bs
-        where pid = '0' and role >= #{role}
+        where pid = '0'
+        <if test="role != null and role != ''">
+            and role &amp; #{role} &gt; 0
+        </if>
         order by menu_sort asc
     </select>
     <!--获取下级菜单,全部-->
@@ -43,7 +46,7 @@
         from t_menu_bs
         where pid = #{pid}
         <if test="role != null and role != ''">
-            and role >= #{role}
+            and role &amp; #{role} &gt; 0
         </if>
         order by menu_sort asc
     </select>
@@ -99,4 +102,30 @@
         where pid = #{pid}
 
     </select>
+
+
+    <insert id="insertOrUpdate" parameterType="com.cn.admin.api.gg.dto.MenuDTO">
+        insert into t_menu_bs(
+            id,
+            icon,
+            role,
+            mid,
+            menu_sort,
+            pid,
+            title,
+            url,
+            visible
+        )values (
+            #{id},#{icon},#{role},#{mid},#{menuSort},#{pid},#{title},#{url},#{visible}
+        ) ON DUPLICATE KEY UPDATE
+            id = values(id),
+            icon = values(icon),
+            role = values(role),
+            mid = values(mid),
+            menu_sort = values(menu_sort),
+            pid = values(pid),
+            title = values(title),
+            url = values(url),
+            visible = values(visible)
+    </insert>
 </mapper>

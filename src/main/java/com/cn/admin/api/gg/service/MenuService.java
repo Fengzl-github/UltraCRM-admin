@@ -2,6 +2,7 @@ package com.cn.admin.api.gg.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.cn.admin.api.gg.vo.menu.MenuEditVO;
+import com.cn.admin.api.gg.vo.menu.MenuVO;
 
 /**
  *@Author fengzhilong
@@ -37,4 +38,13 @@ public interface MenuService {
      * @return void
      **/
     void updateMenuNode(MenuEditVO menuEditVO);
+
+    /**
+     * @Author fengzhilong
+     * @Desc 编辑保存菜单
+     * @Date 2021/8/3 11:52
+     * @param menuVO
+     * @return com.cn.common.vo.ResResult
+     **/
+    void saveMenu(MenuVO menuVO);
 }

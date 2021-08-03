@@ -155,9 +155,40 @@
                 console.log('修改', data);
                 vData.dialogVisible = true;
                 vData.editData = data;
+                let role = data.role;
+                var arr = [];
+                let i = 1;
+                while (i <= role) {
+                    if (role & i > 0) arr.push(i);
+                    i = i * 2;
+                }
+                vData.roleList = arr;
             },
             saveMenu() {
-                console.log('保存', vData.roleList);
+                let role = 0;
+                for (var i = 0, len = vData.roleList.length; i < len; i++) {
+                    role += vData.roleList[i];
+                }
+                let vJsonForm = {
+                    "mid": vData.editData.id,
+                    "title": vData.editData.label,
+                    "icon": vData.editData.icon,
+                    "role": role,
+                    "url": vData.editData.url,
+                    "visible": vData.editData.visible
+                };
+                axios.post("${rootURL}/saveMenu", vJsonForm)
+                    .then(function (response) {
+                        let res = response.data;
+                        myEl.elAlert(res.code, res.msg);
+                        if (res.code === 200){
+                            vData.dialogVisible = false;
+                            getMenuData();
+                        }
+                    })
+                    .catch(function (e) {
+
+                    })
             }
         },
         watch: {
@@ -192,7 +223,7 @@
 
 
     function getMenuData() {
-        axios.post('${rootURL}/getEditMenuData', {"role": 0})
+        axios.post('${rootURL}/getEditMenuData', {"role": 4})
             .then(function (response) {
                 let res = response.data;
                 vData.data = res.data;

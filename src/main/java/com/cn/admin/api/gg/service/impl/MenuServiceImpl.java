@@ -2,8 +2,10 @@ package com.cn.admin.api.gg.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.cn.admin.api.gg.dto.MenuDTO;
+import com.cn.admin.api.gg.mapstruct.menu.MenuConvertet;
 import com.cn.admin.api.gg.service.MenuService;
 import com.cn.admin.api.gg.vo.menu.MenuEditVO;
+import com.cn.admin.api.gg.vo.menu.MenuVO;
 import com.cn.admin.api.mapper.callthink.MenuMapper;
 import com.cn.common.exception.FzlException;
 import lombok.extern.slf4j.Slf4j;
@@ -195,6 +197,22 @@ public class MenuServiceImpl implements MenuService {
         } else {
             throw new FzlException("拖拽类型有误");
         }
+    }
+
+
+    /**
+     * @Author fengzhilong
+     * @Desc 编辑保存菜单
+     * @Date 2021/8/3 11:52
+     * @param menuVO
+     * @return com.cn.common.vo.ResResult
+     **/
+    @Override
+    public void saveMenu(MenuVO menuVO) {
+        MenuDTO menuDTO = menuMapper.findByMid(menuVO.getMid());
+        MenuConvertet.INSTANCE.updateMenu(menuVO, menuDTO);
+
+        menuMapper.insertOrUpdate(menuDTO);
     }
 
     /**

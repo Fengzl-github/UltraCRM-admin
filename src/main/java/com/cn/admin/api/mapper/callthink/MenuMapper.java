@@ -36,4 +36,6 @@ public interface MenuMapper {
     void updateMidAndPidAndSort(@Param("mid") String mid, @Param("pid") String pid, @Param("sourceMid") String sourceMid, @Param("menuSort") Integer menuSort);
 
     String getMaxMid(String pid);
+
+    void insertOrUpdate(MenuDTO menuDTO);
 }
