@@ -6,6 +6,7 @@ import com.cn.admin.api.base.PmAgent;
 import com.cn.admin.api.base.PmJwtToken;
 import com.cn.admin.api.gg.service.MenuService;
 import com.cn.admin.api.gg.vo.menu.MenuEditVO;
+import com.cn.admin.api.gg.vo.menu.MenuVO;
 import com.cn.common.vo.ResCode;
 import com.cn.common.vo.ResResult;
 import lombok.extern.slf4j.Slf4j;
@@ -60,20 +61,40 @@ public class MenuController {
      * @return com.cn.common.vo.ResResult
      **/
     @PostMapping("/getEditMenuData")
-    public ResResult getEditMenuData(Integer role, Integer reset){
+    public ResResult getEditMenuData(Integer role){
 
         JSONArray json = menuService.getEditMenuData(role);
-        if (reset == 1){
-            log.info("[重置缓存] ## role -> {}; data-> {}", role, json.toJSONString());
-        }
+        
         return ResCode.OK.setData(json);
     }
 
 
+    /**
+     * @Author fengzhilong 
+     * @Desc 拖拽修改菜单
+     * @Date 2021/7/26 17:07
+     * @param menuEditVO 
+     * @return com.cn.common.vo.ResResult
+     **/
     @PostMapping("/updateMenuNode")
     public ResResult updateMenuNode(@Valid @RequestBody MenuEditVO menuEditVO){
 
         menuService.updateMenuNode(menuEditVO);
+
+        return ResCode.OK.msg("操作成功");
+    }
+
+    /**
+     * @Author fengzhilong
+     * @Desc 编辑保存菜单
+     * @Date 2021/8/3 11:52
+     * @param menuVO
+     * @return com.cn.common.vo.ResResult
+     **/
+    @PostMapping("/saveMenu")
+    public ResResult saveMenu(@Valid @RequestBody MenuVO menuVO){
+
+        menuService.saveMenu(menuVO);
 
         return ResCode.OK.msg("操作成功");
     }

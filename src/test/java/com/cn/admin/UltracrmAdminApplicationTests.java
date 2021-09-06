@@ -24,7 +24,7 @@ public class UltracrmAdminApplicationTests {
     @Test
     public void contextLoads() {
 
-        menuMapper.addSpaceForMenuSort(1, 1, "1");
+//        menuMapper.addSpaceForMenuSort(1, 1, "1");
 
 
         System.out.println("ceshi");

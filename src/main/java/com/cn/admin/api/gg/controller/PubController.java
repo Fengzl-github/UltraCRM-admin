@@ -3,6 +3,7 @@ package com.cn.admin.api.gg.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.admin.api.gg.dto.option.IntOption;
 import com.cn.admin.api.gg.service.GroupService;
+import com.cn.admin.api.gg.service.RoleService;
 import com.cn.common.exception.FzlException;
 import com.cn.common.utils.MyString;
 import com.cn.common.vo.ResCode;
@@ -37,6 +38,8 @@ public class PubController {
 
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private RoleService roleService;
 
 
     /**
@@ -54,7 +57,20 @@ public class PubController {
         return ResCode.OK.setData(list);
     }
 
+    /**
+     * @Author fengzhilong 
+     * @Desc 获取下拉-权限信息
+     * @Date 2021/7/28 14:25
+     * @param  
+     * @return com.cn.common.vo.ResResult
+     **/
+    @PostMapping("/getRoleOptions")
+    public ResResult getRoleOptions() {
 
+        List<IntOption> list = roleService.listRoleInfo();
+
+        return ResCode.OK.setData(list);
+    }
 
 
     /**

@@ -42,6 +42,6 @@ public class PageController {
 
     @GetMapping("/menuList")
     public String menuList() {
-        return "menu/menuList";
+        return "jmbar/jmbarList";
     }
 }
