@@ -44,7 +44,8 @@
                 {fieldName: '手机号', fieldValue: 'mobile'}
             ],
             otherBut: [
-                {name: '新增', methodName: 'addData', type: 'primary'}
+                {name: '新增', methodName: 'addData', type: 'primary'},
+                // {name: '下载', methodName: 'download', type: 'primary'}
             ]
         },
         tableData: {
@@ -149,6 +150,14 @@
         getData();
     }
 
+    /*function download(){
+        console.log("测试下载");
+        // var msg =window.location.href = "http://localhost:8090/pc/ortho/public/model/zip/modelZipDownload?orderNo=2020102832361000004&downFlag=cutt";
+        var msg = window.open('http://localhost:8090/pc/ortho/public/model/zip/modelZipDownload?orderNo=2020102832361000004&downFlag=step')
+
+        console.log("msg==", msg);
+    }*/
+
     function resetQuery() {
         let query = vData.queryForm.queryField;
         for (let value of query) {
@@ -160,6 +169,9 @@
         if (methodName === 'addData') {
             console.log('新增')
         }
+        /*if(methodName === 'download'){
+            download();
+        }*/
     }
 
     // 获取下拉组数据
