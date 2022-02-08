@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 /**
@@ -42,11 +41,10 @@ public class MenuServiceImpl implements MenuService {
     @Cacheable(cacheNames = "menu#60*60*3", key = "'role'+#a0")
     public JSONArray getMenuData(Integer role) {
 
-        List<MenuDTO> Menus1 = menuMapper.getMenu1Data(role);
-        StringBuilder sb = getJsonListFormat(Menus1, role);
+        List<MenuDTO> menus1 = menuMapper.getMenu1Data(role);
+        StringBuilder sb = getJsonListFormat(menus1, role);
         log.info("菜单数据：{}", sb.toString());
-        JSONArray json = JSONArray.parseArray(sb.toString());
-        return json;
+        return JSONArray.parseArray(sb.toString());
     }
 
     /**
@@ -58,13 +56,15 @@ public class MenuServiceImpl implements MenuService {
 
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        MenuDTO menu = null;
-        String menuId = "";
+        MenuDTO menu;
+        String menuId;
         for (int i = 0; i < menuData.size(); i++) {
             menu = menuData.get(i);
             menuId = menu.getMid();
 
-            if (i > 0) sb.append(",");
+            if (i > 0) {
+                sb.append(",");
+            }
             sb.append("{");
             sb.append("\"id\": \"" + menuId + "\", ");
             sb.append("\"title\": \"" + menu.getTitle() + "\", ");
@@ -93,11 +93,10 @@ public class MenuServiceImpl implements MenuService {
      **/
     @Override
     public JSONArray getEditMenuData(Integer role) {
-        List<MenuDTO> Menus1 = menuMapper.getAllMenu1Data(role);
-        StringBuilder sb = getJsonListFormat2(Menus1, role);
+        List<MenuDTO> menus1 = menuMapper.getAllMenu1Data(role);
+        StringBuilder sb = getJsonListFormat2(menus1, role);
         log.info("[菜单管理] ## 菜单数据：{}", sb.toString());
-        JSONArray json = JSONArray.parseArray(sb.toString());
-        return json;
+        return JSONArray.parseArray(sb.toString());
     }
 
     /**
@@ -123,7 +122,8 @@ public class MenuServiceImpl implements MenuService {
         MenuDTO targetMenu = menuMapper.findByMid(menuEditVO.getTargetId());
         String sourcePid = sourceMenu.getPid();
         String targetPid = targetMenu.getPid();
-        if (menuEditVO.getDropType().equals("before")) { //前
+        //前
+        if ("before".equals(menuEditVO.getDropType())) {
             if (sourcePid.equals(targetPid)) {
                 //上移
                 if (sourceMenu.getMenuSort() > targetMenu.getMenuSort()) {
@@ -154,7 +154,9 @@ public class MenuServiceImpl implements MenuService {
                     menuMapper.updateMidForMenuSort(sourcePid, sourceMenu.getMenuSort());
                 }*/
             }
-        } else if (menuEditVO.getDropType().equals("inner")) { // 中
+            // 中
+        } else if ("inner".equals(menuEditVO.getDropType())) {
+
             //拖拽节点继承目标节点父id,mid修改为目标节点格式,如果拖拽节点下有子节点,同步修改 (排序问题)
             int menuSort = 1;
             List<MenuDTO> nextAllMenuData = menuMapper.getNextAllMenuData(menuEditVO.getTargetId(), null);
@@ -250,7 +252,9 @@ public class MenuServiceImpl implements MenuService {
             menu = menuData.get(i);
             menuId = menu.getMid();
 
-            if (i > 0) sb.append(",");
+            if (i > 0) {
+                sb.append(",");
+            }
             sb.append("{");
             sb.append("\"id\": \"" + menuId + "\", ");
             sb.append("\"label\": \"" + menu.getTitle() + "\", ");
