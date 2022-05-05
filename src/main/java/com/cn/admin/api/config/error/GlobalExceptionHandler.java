@@ -38,7 +38,6 @@ public class GlobalExceptionHandler {
      **/
     @ExceptionHandler(value = RuntimeException.class)
     public JSONObject allExceptionHandler(HttpServletRequest request, RuntimeException exception) {
-        log.error("[系统异常] ## msg -> {}", exception.getMessage(), exception);
         JSONObject json = new JSONObject();
         json.put("code", -1);
         json.put("msg", "服务器异常![" + request.getAttribute(LogConstant.REQUEST_ID) + "]");
@@ -69,7 +68,7 @@ public class GlobalExceptionHandler {
     public ResResult saasExceptionHandler(HttpServletRequest request, FzlException e) {
         int errCode = e.getCode();
         ResResult resResult = new ResData(errCode == 0 ? -1 : errCode, e.getMessage() + "[" + request.getAttribute(LogConstant.REQUEST_ID) + "]", null);
-        log.error("[FzlException] ## 业务异常 response -> {}", JSONObject.toJSONString(resResult));
+        log.warn("[FzlException] ## 业务异常 response -> {}", JSONObject.toJSONString(resResult));
         return resResult;
     }
 }

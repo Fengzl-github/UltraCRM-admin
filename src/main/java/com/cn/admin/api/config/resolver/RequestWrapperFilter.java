@@ -47,6 +47,7 @@ public class RequestWrapperFilter implements Filter {
                     filterChain.doFilter(myRequestWrapper, servletResponse);
                 } else {
                     log.info(" ## request params -> {}", JSONObject.toJSONString(request.getParameterMap()));
+                    log.info(" ## request ContentType -> {}", servletRequest.getContentType());
                     log.info("                                                           ");
                     log.info("-----------------------------------------------------------");
                     filterChain.doFilter(servletRequest, servletResponse);
