@@ -18,6 +18,12 @@
         </encoder>
     </appender>
 
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--指定logstash ip：监听端口-->
+        <destination>192.168.40.149:5601</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
     <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
         <discardingThreshold>0</discardingThreshold>
         <queueSize>${DEFAULT_ASYNC_QUEUE_SIZE}</queueSize>

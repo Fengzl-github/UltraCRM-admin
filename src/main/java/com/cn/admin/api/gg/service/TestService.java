@@ -12,4 +12,9 @@ import java.util.List;
 public interface TestService {
 
     List<TestDTO> getTest();
+
+    /**
+     * 测试service层事务和锁
+     */
+    void testLock();
 }

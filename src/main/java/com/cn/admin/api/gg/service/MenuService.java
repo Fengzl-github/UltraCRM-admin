@@ -32,7 +32,7 @@ public interface MenuService {
 
     /**
      * @Author fengzhilong
-     * @Desc 拖拽修改菜单
+     * @Desc  
      * @Date 2021/7/23 15:32
      * @param menuEditVO
      * @return void
