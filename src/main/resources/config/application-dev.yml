@@ -81,6 +81,12 @@ spring:
     password: 123456
 
 
+#elasticsearch配置
+elasticsearch:
+    url: 192.168.80.128
+    port: 9200
+
+
 # knife4j接口文档配置
 knife4j:
   # 是否开启Knife4j增强模式

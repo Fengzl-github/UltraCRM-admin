@@ -1,7 +1,7 @@
 package com.cn.admin;
 
 
-import com.cn.admin.api.mapper.callthink.MenuMapper;
+import com.cn.admin.api.gg.service.impl.ElasticServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,14 +19,16 @@ import javax.annotation.Resource;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UltracrmAdminApplicationTests {
     @Resource
-    private MenuMapper menuMapper;
+    private ElasticServiceImpl elasticService;
 
     @Test
     public void contextLoads() {
 
 //        menuMapper.addSpaceForMenuSort(1, 1, "1");
 
+        elasticService.saveDocment();
+        elasticService.searchIndex();
+//        elasticService.existindex();
 
-        System.out.println("ceshi");
     }
 }

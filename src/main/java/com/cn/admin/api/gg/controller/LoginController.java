@@ -1,9 +1,12 @@
 package com.cn.admin.api.gg.controller;
 
+import com.cn.admin.api.base.PmAgent;
 import com.cn.admin.api.gg.service.LoginService;
 import com.cn.admin.api.gg.vo.login.LoginVO;
 import com.cn.common.vo.ResResult;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.github.xiaoymin.knife4j.annotations.DynamicParameter;
+import com.github.xiaoymin.knife4j.annotations.DynamicResponseParameters;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,11 @@ public class LoginController {
 
     @ApiOperation(value = "登录")
     @PostMapping("/verification")
+
+    @DynamicResponseParameters(name = "data",properties = {
+            @DynamicParameter(name = "content",value = "返回数据",required = true,dataTypeClass = PmAgent.class),
+            @DynamicParameter(name = "token",value = "登录token",required = true,dataTypeClass = String.class)
+    })
     public ResResult verification(@Validated @RequestBody LoginVO loginVO){
 
         return loginService.verification(loginVO);

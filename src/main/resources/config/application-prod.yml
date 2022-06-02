@@ -79,6 +79,10 @@ spring:
     host: 192.168.80.128
     port: 6379
     password: 123456
+#elasticsearch配置
+elasticsearch:
+  url: 192.168.80.128
+  port: 9200
 
 
 

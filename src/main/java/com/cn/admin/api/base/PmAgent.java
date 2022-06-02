@@ -1,5 +1,6 @@
 package com.cn.admin.api.base;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import lombok.Data;
  *@Desc
  **/
 @Data
+@ApiModel(value = "用户对象")
 public class PmAgent {
 
     @ApiModelProperty(value = "账号")
@@ -19,7 +21,7 @@ public class PmAgent {
     private String nickName;
     @ApiModelProperty(value = "手机号")
     private String mobile;
-    @ApiModelProperty(value = "性别: 1-男,2-女")
+    @ApiModelProperty(value = "性别", notes = "1-男,2-女")
     private Integer sex;
     @ApiModelProperty(value = "年龄")
     private Integer age;
