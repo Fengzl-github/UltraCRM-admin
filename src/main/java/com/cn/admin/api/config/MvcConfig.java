@@ -110,6 +110,6 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 
         registry.addInterceptor(getLoginInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/login/**", "/page/**");
+                .excludePathPatterns("/", "/login/**", "/page/**","/actuator/**");
     }
 }

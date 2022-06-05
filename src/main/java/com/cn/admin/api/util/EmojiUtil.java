@@ -84,8 +84,5 @@ public class EmojiUtil {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(filterEmoji("\uD870\uDF17hah"));
-        System.out.println(filterEmoji("𬌗hah"));
-    }
+
 }

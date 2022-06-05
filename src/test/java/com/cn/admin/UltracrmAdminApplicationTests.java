@@ -26,7 +26,7 @@ public class UltracrmAdminApplicationTests {
 
 //        menuMapper.addSpaceForMenuSort(1, 1, "1");
 
-        elasticService.saveDocment();
+//        elasticService.saveDocment();
         elasticService.searchIndex();
 //        elasticService.existindex();
 

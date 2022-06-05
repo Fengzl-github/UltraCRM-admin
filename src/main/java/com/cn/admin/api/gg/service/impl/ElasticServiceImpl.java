@@ -75,7 +75,7 @@ public class ElasticServiceImpl {
             SearchResponse<UserDTO> search = client.search(s -> s
                     .index("posts")
                             .query(q->q
-                                    .ids(i->i.values("1"))
+                                    .ids(i->i.values("3"))
                             )
                     , UserDTO.class);
 
