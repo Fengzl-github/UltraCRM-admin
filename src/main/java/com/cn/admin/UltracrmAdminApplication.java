@@ -26,9 +26,9 @@ public class UltracrmAdminApplication {
 
 
     @Bean
-    MeterRegistryCustomizer<MeterRegistry> configurer(
+    MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(
             @Value("${spring.application.name}") String applicationName){
-        return (registry) -> registry.config().commonTags("application", applicationName);
+        return registry -> registry.config().commonTags("application", applicationName);
     }
 
 }

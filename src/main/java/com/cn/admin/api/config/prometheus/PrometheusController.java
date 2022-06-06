@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 /**
  * @Author Fengzl
@@ -26,11 +24,16 @@ import java.net.URISyntaxException;
 @RequestMapping("/prometheus")
 public class PrometheusController {
 
+    @Value("${server.port}")
+    private String serverPort;
+
+
     @GetMapping(path = "/metrics", produces = MediaType.TEXT_PLAIN_VALUE)
-    public void healthz(HttpServletResponse response) throws URISyntaxException {
+    public void healthz(HttpServletResponse response) {
         log.info("Prometheus - 返回数据格式转换");
         RestTemplate restTemplate = new RestTemplate();
-        StringBuilder prometheusUrl = new StringBuilder("http://192.168.0.114:9060");
+        StringBuilder prometheusUrl = new StringBuilder("http://127.0.0.1:");
+        prometheusUrl.append(serverPort);
         prometheusUrl.append("/actuator/prometheus");
 
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(prometheusUrl.toString(), String.class);
