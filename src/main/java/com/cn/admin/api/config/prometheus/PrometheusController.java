@@ -1,7 +1,6 @@
 package com.cn.admin.api.config.prometheus;
 
 import com.alibaba.fastjson.JSON;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import java.io.IOException;
  * @Date 2022/6/5 18:42
  * @Desc
  **/
-@Slf4j
 @RestController
 @RequestMapping("/prometheus")
 public class PrometheusController {
@@ -30,7 +28,6 @@ public class PrometheusController {
 
     @GetMapping(path = "/metrics", produces = MediaType.TEXT_PLAIN_VALUE)
     public void healthz(HttpServletResponse response) {
-        log.info("Prometheus - 返回数据格式转换");
         RestTemplate restTemplate = new RestTemplate();
         StringBuilder prometheusUrl = new StringBuilder("http://127.0.0.1:");
         prometheusUrl.append(serverPort);

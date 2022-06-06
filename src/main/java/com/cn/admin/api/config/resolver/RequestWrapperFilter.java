@@ -62,7 +62,9 @@ public class RequestWrapperFilter implements Filter {
 
     public boolean isFilterExcludeRequest(HttpServletRequest request) {
         String strUri = request.getRequestURI();
-        return strUri.equals("/") || strUri.startsWith("/page") || strUri.endsWith(".ico") || strUri.startsWith("/common") || strUri.startsWith("/images");
+        return strUri.equals("/") || strUri.startsWith("/page") || strUri.endsWith(".ico")
+                || strUri.startsWith("/common") || strUri.startsWith("/images")
+                || strUri.startsWith("/prometheus") || strUri.startsWith("/actuator");
     }
 
     @Override
