@@ -23,8 +23,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 @EnableSwagger2WebMvc
 public class Knife4jConfig {
 
-    // 引入knife4j提供的扩展类
-    private final OpenApiExtensionResolver openApiExtensionResolver;
+    /**
+     * 引入knife4j提供的扩展类
+     */
+    private  OpenApiExtensionResolver openApiExtensionResolver;
 
     @Autowired
     public Knife4jConfig(OpenApiExtensionResolver openApiExtensionResolver) {
@@ -38,6 +40,7 @@ public class Knife4jConfig {
         String groupName = "Admin接口";
 
         log.info("------------------ Knife4j 配置 --------------------");
+        log.info("------------------ Knife4j 接口文档访问路径: ip:port/doc.html --------------------");
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()

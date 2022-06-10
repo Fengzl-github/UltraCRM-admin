@@ -85,16 +85,23 @@ spring:
   elasticsearch:
     rest:
       uris: 192.168.80.128:9200
+      username: elastic
+      password: rT7FjHXsMQTa9i16ctAM
 
 
 #elasticsearch配置
 elasticsearch:
-    url: 192.168.80.128
-    port: 9200
+  url: 192.168.80.128
+  port: 9200
+  user: elastic
+  password: rT7FjHXsMQTa9i16ctAM
 
 
 # 配置prometheus
 management:
+  health:
+    elasticsearch:
+      enabled: true
   endpoints:
     web:
       exposure:
@@ -142,7 +149,7 @@ knife4j:
     # 是否启用Host
     enableHost: false
     # 具体的Host
-    enableHostText: 127.0.0.1:9090
+    enableHostText: 127.0.0.1:9060
     # 是否开启自定义主页内容
     enableHomeCustom: false
     # 主页内容Markdown文件路径
@@ -175,6 +182,11 @@ knife4j:
     username: admin
     #密码
     password: admin
+  documents:
+    - group: Admin接口
+      name: 自定义文档
+      # 某一个文件夹下所有的.md文件
+      locations: classpath:markdown/*
 
 
 logging:

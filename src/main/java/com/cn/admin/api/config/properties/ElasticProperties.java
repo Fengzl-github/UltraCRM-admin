@@ -29,4 +29,13 @@ public class ElasticProperties {
      * 端口号
      */
     private int port = 9200;
+
+    /**
+     * 用户名
+     */
+    private String user = "elastic";
+    /**
+     * 密码
+     */
+    private String password;
 }

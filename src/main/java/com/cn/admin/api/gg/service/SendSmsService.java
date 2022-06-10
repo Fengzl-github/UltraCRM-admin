@@ -15,6 +15,11 @@ public class SendSmsService {
 
     @Async
     public void sendMsg(int i) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         log.info("子线程:{},发送短信[{}]",Thread.currentThread().getName(), i);
     }
 

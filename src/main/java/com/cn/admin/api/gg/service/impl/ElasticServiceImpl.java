@@ -31,9 +31,9 @@ public class ElasticServiceImpl {
 
     public Boolean saveDocment() {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(3);
-        userDTO.setName("seri");
-        userDTO.setAge(18);
+        userDTO.setId(1);
+        userDTO.setName("timo");
+        userDTO.setAge(20);
 
         try {
 
@@ -75,7 +75,7 @@ public class ElasticServiceImpl {
             SearchResponse<UserDTO> search = client.search(s -> s
                     .index("posts")
                             .query(q->q
-                                    .ids(i->i.values("3"))
+                                    .ids(i->i.values("1"))
                             )
                     , UserDTO.class);
 
