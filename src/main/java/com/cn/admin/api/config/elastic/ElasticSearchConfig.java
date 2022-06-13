@@ -32,19 +32,18 @@ public class ElasticSearchConfig {
     private String user;
     @Value("${spring.elasticsearch.rest.password}")
     private String pwd;
+
     @Bean
     public ElasticsearchClient elasticsearchClient() {
-
-        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials(user, pwd));
-
-        log.info("-----初始化es配置-----用户:{};密码:{}", user, pwd);
 
         HttpHost[] httpHosts = Arrays.stream(uris.split(",")).map(x -> {
             String[] uriInfo = x.split(":");
             return new HttpHost(uriInfo[0], Integer.parseInt(uriInfo[1]));
         }).toArray(HttpHost[]::new);
+
+        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        credentialsProvider.setCredentials(AuthScope.ANY,
+                new UsernamePasswordCredentials(user, pwd));
 
         RestClient restClient = RestClient.builder(httpHosts)
                 .setHttpClientConfigCallback(httpClientBuilder -> {
@@ -57,10 +56,6 @@ public class ElasticSearchConfig {
         ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
 
         return new ElasticsearchClient(transport);
-
-
-
-
 
     }
 }
