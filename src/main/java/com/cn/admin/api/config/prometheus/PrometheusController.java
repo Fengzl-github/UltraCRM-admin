@@ -26,6 +26,11 @@ public class PrometheusController {
     private String serverPort;
 
 
+    /**
+     * 因整体项目配置了fastjson序列化参数,导致/actuator/prometheus返回格式改变从而Prometheus识别不到
+     * 因此对/actuator/prometheus进行路径转换
+     * @param response
+     */
     @GetMapping(path = "/metrics", produces = MediaType.TEXT_PLAIN_VALUE)
     public void healthz(HttpServletResponse response) {
         RestTemplate restTemplate = new RestTemplate();

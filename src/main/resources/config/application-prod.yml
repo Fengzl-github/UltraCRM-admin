@@ -79,10 +79,14 @@ spring:
     host: 192.168.80.128
     port: 6379
     password: 123456
-#elasticsearch配置
-elasticsearch:
-  url: 192.168.80.128
-  port: 9200
+  application:
+    name: fzl-admin-api
+  # elasticsearch配置
+  elasticsearch:
+    rest:
+      uris: 192.168.80.128:9200
+      username: elastic
+      password: rT7FjHXsMQTa9i16ctAM
 
 
 

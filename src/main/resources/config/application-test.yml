@@ -84,10 +84,9 @@ spring:
   elasticsearch:
     rest:
       uris: 192.168.27.128:9200
-#elasticsearch配置
-elasticsearch:
-  url: 192.168.27.128
-  port: 9200
+      username: elastic
+      password: rT7FjHXsMQTa9i16ctAM
+
 
 
 

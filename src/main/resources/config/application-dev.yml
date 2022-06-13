@@ -81,7 +81,7 @@ spring:
     password: 123456
   application:
     name: fzl-admin-api
-  # actuator健康检测所需要
+  # elasticsearch配置
   elasticsearch:
     rest:
       uris: 192.168.80.128:9200
@@ -89,12 +89,6 @@ spring:
       password: rT7FjHXsMQTa9i16ctAM
 
 
-#elasticsearch配置
-elasticsearch:
-  url: 192.168.80.128
-  port: 9200
-  user: elastic
-  password: rT7FjHXsMQTa9i16ctAM
 
 
 # 配置prometheus

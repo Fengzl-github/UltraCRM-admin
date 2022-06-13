@@ -4,7 +4,6 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
-import com.cn.admin.api.config.properties.ElasticProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -12,9 +11,11 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.elasticsearch.client.RestClient;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Arrays;
 
 /**
  * @Author Fengzl
@@ -23,18 +24,29 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration
-@EnableConfigurationProperties(ElasticProperties.class)
 public class ElasticSearchConfig {
 
+    @Value("${spring.elasticsearch.rest.uris}")
+    private String uris;
+    @Value("${spring.elasticsearch.rest.username}")
+    private String user;
+    @Value("${spring.elasticsearch.rest.password}")
+    private String pwd;
     @Bean
-    public ElasticsearchClient elasticsearchClient(ElasticProperties properties) {
+    public ElasticsearchClient elasticsearchClient() {
 
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials(properties.getUser(), properties.getPassword()));
+                new UsernamePasswordCredentials(user, pwd));
 
-        log.info("-----初始化es配置-----用户:{};密码:{}", properties.getUser(), properties.getPassword());
-        RestClient restClient = RestClient.builder(new HttpHost(properties.getUrl(), properties.getPort()))
+        log.info("-----初始化es配置-----用户:{};密码:{}", user, pwd);
+
+        HttpHost[] httpHosts = Arrays.stream(uris.split(",")).map(x -> {
+            String[] uriInfo = x.split(":");
+            return new HttpHost(uriInfo[0], Integer.parseInt(uriInfo[1]));
+        }).toArray(HttpHost[]::new);
+
+        RestClient restClient = RestClient.builder(httpHosts)
                 .setHttpClientConfigCallback(httpClientBuilder -> {
                     httpClientBuilder.disableAuthCaching();
                     return httpClientBuilder
