@@ -1,5 +1,9 @@
 package com.cn.admin.api.gg.controller;
 
+import cn.hutool.http.useragent.Browser;
+import cn.hutool.http.useragent.Platform;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.cn.admin.api.gg.service.SendSmsService;
 import com.cn.admin.api.gg.service.TestService;
 import com.cn.common.vo.ResCode;
@@ -7,9 +11,10 @@ import com.cn.common.vo.ResResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author Fengzl
@@ -37,12 +42,18 @@ public class LockTestController {
     }
 
 
-    @PostMapping("/lock")
-    public ResResult testLock(){
+    @GetMapping("/lock")
+    public ResResult testLock(HttpServletRequest request){
 
         log.info("进入方法.....{}", System.currentTimeMillis());
-        testService.testLock();
+//        testService.testLock();
 
-        return ResCode.OK;
+        UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
+
+        Browser browser = userAgent.getBrowser();
+        Platform platform = userAgent.getPlatform();
+        System.out.println(platform.getName());
+        System.out.println(browser.getName());
+        return ResCode.OK.msg("操作成功");
     }
 }

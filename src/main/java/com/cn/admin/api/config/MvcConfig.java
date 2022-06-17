@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -68,6 +69,14 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 
         //4.将fastConverter添加到converters中
         converters.add(fastConverter);
+//        converters.add(responseBodyConverter());
+    }
+
+//    @Bean
+    public HttpMessageConverter responseBodyConverter(){
+        //解决返回值中文乱码
+        StringHttpMessageConverter converter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        return converter;
     }
 
     @Override
