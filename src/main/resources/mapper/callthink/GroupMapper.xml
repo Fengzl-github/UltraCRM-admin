@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.admin.api.mapper.callthink.GroupMapper">
+    <resultMap id="groupDTO" type="com.cn.admin.api.gg.dto.GroupDTO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="groupMember" type="com.cn.admin.api.gg.dto.GroupMemberDTO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="ghid" property="ghid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="groupMember">
+        id,ghid,name,group_id,group_name
+    </sql>
+
+
+    <select id="findAll" resultMap="groupDTO" parameterType="java.lang.String">
+        select id, group_name from t_group
+        where 1=1
+        <if test="groupName != '' and groupName != null ">
+            and group_name like CONCAT('%', #{groupName}, '%')
+        </if>
+        order by id asc
+
+    </select>
+
+
+    <select id="findById" resultMap="groupDTO" parameterType="java.lang.Integer">
+        select id, group_name from t_group
+        where id =  #{id}
+    </select>
+
+
+    <insert id="insertOrUpdate" parameterType="com.cn.admin.api.gg.dto.GroupDTO">
+        insert into t_group(
+            id, group_name
+        ) values(
+            #{id}, #{groupName}
+        ) ON DUPLICATE KEY UPDATE
+        id = values(id),
+        group_name = values(group_name)
+
+    </insert>
+
+
+    <delete id="removeGroup" parameterType="java.lang.Integer">
+        delete from t_group where id = #{id}
+    </delete>
+
+    <select id="findMemberInfo" resultMap="groupMember" parameterType="com.cn.admin.api.gg.vo.group.UserGroupVO">
+        select
+        <include refid="groupMember"/>
+        from t_group_member
+        where
+        group_id = #{groupId}
+        and
+        ghid = #{ghid}
+
+    </select>
+
+
+    <delete id="removeMember" parameterType="java.lang.Integer">
+        delete from t_group_member
+        where id = #{id}
+    </delete>
+
+    <delete id="removeMemberByGhid" parameterType="java.lang.String">
+        delete from t_group_member
+        where ghid = #{ghid}
+    </delete>
+
+    <insert id="insertGroupMember" parameterType="com.cn.admin.api.gg.dto.GroupMemberDTO">
+        insert into t_group_member(
+            ghid,name,group_id,group_name
+        )values(
+            #{ghid},#{name},#{groupId},#{groupName}
+        )
+    </insert>
+
+
+    <select id="findMemberByGroupId" resultMap="groupMember" parameterType="java.lang.Integer">
+        select
+        <include refid="groupMember"/>
+        from t_group_member
+        where group_id = #{groupId}
+        order by ghid asc
+    </select>
+
+    <select id="findAllOptions" resultType="com.cn.admin.api.gg.dto.option.IntOption">
+        select id as value, group_name as label from t_group
+    </select>
+</mapper>

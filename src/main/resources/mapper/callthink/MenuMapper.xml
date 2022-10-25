@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.admin.api.mapper.callthink.MenuMapper">
+    <resultMap id="Menu" type="com.cn.admin.api.gg.dto.MenuDTO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="mid" property="mid" jdbcType="VARCHAR"/>
+        <result column="pid" property="pid" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="menu_sort" property="menuSort" jdbcType="INTEGER"/>
+        <result column="role" property="role" jdbcType="INTEGER"/>
+        <result column="visible" property="visible" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 获取一级菜单-->
+    <select id="getMenu1Data" resultMap="Menu" parameterType="integer">
+        select id,title,url,mid, icon, role, visible
+        from t_menu_bs
+        where visible = 1 and pid = '0' and role &amp; #{role} &gt; 0
+        order by menu_sort asc
+    </select>
+
+    <!-- 获取下级菜单-->
+    <select id="getNextMenuData" resultMap="Menu">
+        select id,title,url,mid, icon
+        from t_menu_bs
+        where visible = 1 and pid = #{pid} and role &amp; #{role} &gt; 0
+        order by menu_sort asc
+    </select>
+
+
+    <!-- 获取一级菜单-->
+    <select id="getAllMenu1Data" resultMap="Menu" parameterType="integer">
+        select id,title,url,mid, icon, role, visible
+        from t_menu_bs
+        where pid = '0'
+        <if test="role != null and role != ''">
+            and role &amp; #{role} &gt; 0
+        </if>
+        order by menu_sort asc
+    </select>
+    <!--获取下级菜单,全部-->
+    <select id="getNextAllMenuData" resultMap="Menu">
+        select id,title,url,mid,icon,role,visible,pid,menu_sort
+        from t_menu_bs
+        where pid = #{pid}
+        <if test="role != null and role != ''">
+            and role &amp; #{role} &gt; 0
+        </if>
+        order by menu_sort asc
+    </select>
+
+    <!--根据mid获取菜单数据-->
+    <select id="findByMid" resultMap="Menu">
+        select id,title,url,mid, pid,icon,menu_sort, role, visible
+        from t_menu_bs
+        where mid = #{mid}
+    </select>
+
+    <!--修改排序-->
+    <update id="updateMenuSortByMid">
+        update t_menu_bs set menu_sort = #{menuSort}
+        where mid = #{mid}
+    </update>
+
+    <update id="addSpaceForMenuSort">
+        update t_menu_bs set menu_sort = menu_sort+#{space}
+        where menu_sort &gt;= #{littleSort} and pid = #{pid}
+    </update>
+
+    <update id="updateMidForMenuSort">
+        update t_menu_bs set mid = CONCAT(pid,'-',menu_sort)
+        where menu_sort &gt;= #{menuSort} and pid = #{pid}
+    </update>
+
+    <update id="addSpaceForMenuSortBwn">
+        update t_menu_bs set menu_sort = menu_sort+#{space}
+        where menu_sort &gt;= #{littleSort} and menu_sort &lt; #{bigSort} and pid = #{pid}
+    </update>
+
+
+    <update id="updateMidAndPidAndSort">
+        update t_menu_bs
+        <set>
+            <if test="mid != null and mid != ''">
+                mid = #{mid},
+            </if>
+            <if test="pid != null and pid != ''">
+                pid=#{pid},
+            </if>
+            <if test="menuSort != null and menuSort != 0">
+                menu_sort = #{menuSort},
+            </if>
+        </set>
+        where mid = #{sourceMid}
+    </update>
+
+
+    <select id="getMaxMid" resultType="java.lang.String" parameterType="java.lang.String">
+        select max(mid) from t_menu_bs
+        where pid = #{pid}
+
+    </select>
+
+
+    <insert id="insertOrUpdate" parameterType="com.cn.admin.api.gg.dto.MenuDTO">
+        insert into t_menu_bs(
+            id,
+            icon,
+            role,
+            mid,
+            menu_sort,
+            pid,
+            title,
+            url,
+            visible
+        )values (
+            #{id},#{icon},#{role},#{mid},#{menuSort},#{pid},#{title},#{url},#{visible}
+        ) ON DUPLICATE KEY UPDATE
+            id = values(id),
+            icon = values(icon),
+            role = values(role),
+            mid = values(mid),
+            menu_sort = values(menu_sort),
+            pid = values(pid),
+            title = values(title),
+            url = values(url),
+            visible = values(visible)
+    </insert>
+</mapper>

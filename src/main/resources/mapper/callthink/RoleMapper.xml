@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.admin.api.mapper.callthink.RoleMapper">
+
+
+    <select id="findAllOptions" resultType="com.cn.admin.api.gg.dto.option.IntOption">
+        select id as value, name as label from t_role
+    </select>
+</mapper>

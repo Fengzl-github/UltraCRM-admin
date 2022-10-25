@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.admin.api.mapper.callthink.UserMapper">
+    <resultMap id="User" type="com.cn.admin.api.gg.dto.UserDTO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="ghid" property="ghid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="user_role" property="userRole" jdbcType="INTEGER"/>
+        <result column="user_type" property="userType" jdbcType="INTEGER"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="head_url" property="headUrl" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="is_del" property="isDel" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="UserGroup" type="com.cn.admin.api.gg.dto.UserGroupDTO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="ghid" property="ghid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="user_role" property="userRole" jdbcType="INTEGER"/>
+        <result column="user_type" property="userType" jdbcType="INTEGER"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="head_url" property="headUrl" jdbcType="VARCHAR"/>
+        <result column="is_del" property="isDel" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+        <result column="province_code" property="provinceCode" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="county_code" property="countyCode" jdbcType="VARCHAR"/>
+        <result column="county" property="county" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <sql id="UserBaseColumn">
+        id,create_time,ghid,name,nick_name,mobile,sex,age,user_role,user_type,address,head_url,password,is_del
+    </sql>
+
+    <!-- 检测登录 -->
+    <select id="validLogin" parameterType="com.cn.admin.api.gg.vo.login.LoginVO" resultMap="User">
+        select
+        <include refid="UserBaseColumn"/>
+        from t_user
+        where is_del = 0 and ghid = #{ghid} and password = #{password}
+    </select>
+
+
+    <select id="findByGhid" resultMap="User" parameterType="java.lang.String">
+        select
+        <include refid="UserBaseColumn"/>
+        from t_user
+        where ghid = #{ghid}
+
+    </select>
+
+    <select id="findByid" resultMap="User" parameterType="java.lang.Integer">
+        select
+        <include refid="UserBaseColumn"/>
+        from t_user
+        where id = #{id}
+
+    </select>
+
+
+    <select id="findAllUser" resultMap="UserGroup" parameterType="com.cn.admin.api.gg.vo.user.UserQueryVO">
+        select u.id,u.create_time,u.ghid,u.name,u.nick_name,u.mobile,u.sex,u.age,u.user_role,
+        u.user_type,u.address,u.head_url,u.is_del,u.province_code,u.province,u.city_code,u.city,
+        u.county_code,u.county,gm.group_id,g.group_name
+        from t_user u
+        left join t_group_member gm on u.ghid = gm.ghid
+        left join t_group g on gm.group_id = g.id
+        where u.is_del = 0
+        <if test="ghid != null and ghid != ''">
+            and u.ghid = #{ghid}
+        </if>
+        <if test="name != null and name != ''">
+            and u.name like CONCAT('%', #{name}, '%')
+        </if>
+        <if test="mobile != null and mobile != ''">
+            and u.mobile like CONCAT('%', #{mobile}, '%')
+        </if>
+        <if test="groupId != null and ghid != 0">
+            and gm.group_id = #{groupId}
+        </if>
+        order by u.ghid asc
+    </select>
+
+
+    <update id="removeUser" parameterType="java.lang.String">
+        update t_user set is_del = 1 where id = #{id}
+    </update>
+
+
+    <insert id="insertOrUpdate" parameterType="com.cn.admin.api.gg.dto.UserDTO">
+        insert into t_user(
+            id,
+            ghid,
+            name,
+            nick_name,
+            mobile,
+            sex,
+            age,
+            user_role,
+            user_type,
+            address,
+            head_url,
+            password,
+            province_code,
+            province,
+            city_code,
+            city,
+            county_code,
+            county
+        )values (
+            #{id},#{ghid},#{name},#{nickName},#{mobile},#{sex},#{age},#{userRole},#{userType},#{address},#{headUrl},#{password},#{provinceCode},#{province},#{cityCode},#{city},#{countyCode},#{county}
+        ) ON DUPLICATE KEY UPDATE
+            id = values(id),
+            ghid = values(ghid),
+            name = values(name),
+            nick_name = values(nick_name),
+            mobile = values(mobile),
+            sex = values(sex),
+            age = values(age),
+            user_role = values(user_role),
+            user_type = values(user_type),
+            address = values(address),
+            head_url = values(head_url),
+            password = values(password),
+            province_code = values(province_code),
+            province = values(province)
+            city_code = values(city_code),
+            city = values(city),
+            county_code = values(county_code),
+            county = values(county)
+    </insert>
+</mapper>
